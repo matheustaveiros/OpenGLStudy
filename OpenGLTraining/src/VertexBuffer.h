@@ -1,6 +1,6 @@
 #pragma once
 
-/// \\brief Creates a Vertex Buffer using the Data and Size passed
+/// brief Creates a Vertex Buffer using the Data and Size passed
 /// with functions to bind it as current, unbind
 /// It also deletes the buffer when instance is destroyed
 
