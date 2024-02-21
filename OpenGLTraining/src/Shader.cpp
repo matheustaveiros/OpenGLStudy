@@ -35,6 +35,11 @@ void Shader::SetUniform1f(const std::string& Name, float Value)
     GLCall(glUniform1f(GetUniformLocation(Name), Value));
 }
 
+void Shader::SetUniform1i(const std::string& Name, int Value)
+{
+    GLCall(glUniform1i(GetUniformLocation(Name), Value));
+}
+
 // In a more robust solution for a game engine, we would probably have a SetValue method with overloads for different value types
 // to call the proper uniform function 
 void Shader::SetUniform4f(const std::string& Name, float V0, float V1, float V2, float V3)
@@ -43,6 +48,11 @@ void Shader::SetUniform4f(const std::string& Name, float V0, float V1, float V2,
 
     // Location: id of the uniform. When shader is created, every uniform is assigned to an id
     GLCall(glUniform4f(GetUniformLocation(Name), V0, V1, V2, V3));
+}
+
+void Shader::SetUniformMat4f(const std::string& Name, const glm::mat4& Matrix)
+{
+    GLCall(glUniformMatrix4fv(GetUniformLocation(Name), 1, GL_FALSE, &Matrix[0][0]));
 }
 
 int Shader::GetUniformLocation(const std::string& Name)
