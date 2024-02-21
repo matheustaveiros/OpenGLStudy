@@ -84,7 +84,7 @@ int main(void)
     float bottomBorder = 0.0f, topBorder = 540.0f;
     float zNear = -1.0f, zFar = 1.0f;
     glm::mat4 proj = glm::ortho(leftBorder, rightBorder, bottomBorder, topBorder, zNear, zFar);
-    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));//camera position can be changed here
     
 
     Shader shader("res/shaders/Basic.shader");
@@ -120,6 +120,7 @@ int main(void)
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.0f);
     glm::vec3 translation(0, 0, 0);
+    ImVec4 obj_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -131,13 +132,16 @@ int main(void)
         ImGui::NewFrame();
 
         shader.Bind();
-        //shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
+        
 
         glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
         glm::mat4 mvp = proj * view * model;
 
         ImGuiTranslationExample(translation);
 
+        ImGuiObjectColorExample(obj_color);
+
+        shader.SetUniform4f("u_Color", obj_color.x, obj_color.y, obj_color.z, obj_color.w);
         shader.SetUniformMat4f("u_MVP", mvp);
         renderer.Draw(va, ib, shader);
 
@@ -169,6 +173,16 @@ int main(void)
 
     glfwTerminate();
     return 0;
+}
+
+void ImGuiObjectColorExample(ImVec4& obj_color)
+{
+    {
+        ImGui::Begin("Hello, Color");
+        ImGui::Text("Object Color");
+        ImGui::ColorEdit4("obj color", (float*)&obj_color);
+        ImGui::End();
+    }
 }
 
 void ImGuiTranslationExample(glm::vec3& translation)
