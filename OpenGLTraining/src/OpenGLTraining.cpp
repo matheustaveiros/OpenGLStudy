@@ -119,7 +119,8 @@ int main(void)
     bool show_demo_window = true;
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.0f);
-    glm::vec3 translation(0, 0, 0);
+    glm::vec3 translationA(0, 0, 0);
+    glm::vec3 translationB(100, 0, 0);
     ImVec4 obj_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 
     while (!glfwWindowShouldClose(window))
@@ -131,19 +132,13 @@ int main(void)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        shader.Bind();
-        
-
-        glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
-        glm::mat4 mvp = proj * view * model;
-
-        ImGuiTranslationExample(translation);
+        ImGuiTranslationExample(translationA, 0);
+        ImGuiTranslationExample(translationB, 1);
 
         ImGuiObjectColorExample(obj_color);
 
-        shader.SetUniform4f("u_Color", obj_color.x, obj_color.y, obj_color.z, obj_color.w);
-        shader.SetUniformMat4f("u_MVP", mvp);
-        renderer.Draw(va, ib, shader);
+        DrawObject(shader, translationA, proj, view, obj_color, renderer, va, ib);
+        DrawObject(shader, translationB, proj, view, obj_color, renderer, va, ib);
 
         /*if (r > 1.0f)
             increment = -0.05f;
@@ -175,6 +170,20 @@ int main(void)
     return 0;
 }
 
+void DrawObject(Shader& shader, glm::vec3& translation, glm::mat4& proj, glm::mat4& view, ImVec4& obj_color, Renderer& renderer, VertexArray& va, IndexBuffer& ib)
+{
+    {//obj 1
+        shader.Bind();
+
+        glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
+        glm::mat4 mvp = proj * view * model;
+
+        shader.SetUniform4f("u_Color", obj_color.x, obj_color.y, obj_color.z, obj_color.w);
+        shader.SetUniformMat4f("u_MVP", mvp);
+        renderer.Draw(va, ib, shader);
+    }
+}
+
 void ImGuiObjectColorExample(ImVec4& obj_color)
 {
     {
@@ -185,11 +194,11 @@ void ImGuiObjectColorExample(ImVec4& obj_color)
     }
 }
 
-void ImGuiTranslationExample(glm::vec3& translation)
+void ImGuiTranslationExample(glm::vec3& translation, int id)
 {
-    ImGui::Begin("Hello, translations!");
-    ImGui::SliderFloat("Translation X", &translation.x, 0.0f, 860.0f); //extracting 100 from screen values because of the object "size" on VertexBuffer
-    ImGui::SliderFloat("Translation Y", &translation.y, 0.0f, 440.0f);
+    ImGui::Begin("Hello, translations! " + id);
+    ImGui::SliderFloat("Translation X " + id, &translation.x, 0.0f, 860.0f); //extracting 100 from screen values because of the object "size" on VertexBuffer
+    ImGui::SliderFloat("Translation Y " + id, &translation.y, 0.0f, 440.0f);
     ImGui::End();
 }
 
