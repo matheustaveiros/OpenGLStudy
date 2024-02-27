@@ -14,16 +14,18 @@ private:
 
 public:
 	GameObject(Guid guid, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, const std::string& texturePath, glm::vec3 spriteSize);
+	~GameObject();
 	inline Guid GetGuid() const { return _guid; }
 	inline Transform* GetTransform() { return _transform.get(); }
 	inline SpriteRenderer* GetSpriteRenderer() { return _spriteRenderer.get(); }
 
-	virtual void OnAwake() = 0;
-	virtual void OnStart() = 0;
-	virtual void OnUpdateInput() = 0;
-	virtual void OnUpdatePhysics() = 0;
-	virtual void OnUpdate() = 0;
-	virtual void OnRender() = 0;
-	virtual void OnPostRenderUpdate() = 0;
+	virtual void OnAwake();
+	virtual void OnStart();
+	virtual void OnUpdateInput();
+	virtual void OnUpdatePhysics();
+	virtual void OnUpdate();
+	virtual void OnRender();
+	virtual void OnPostRenderUpdate();
+	virtual void OnDestroy();
 };
 

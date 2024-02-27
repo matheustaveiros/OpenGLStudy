@@ -4,15 +4,6 @@ Scene::Scene(const std::string& name) : _name { name }
 {
 }
 
-template<typename T>
-T* Scene::Instantiate(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, const std::string& texturePath, glm::vec3 spriteSize)
-{
-	Guid newGuid{};
-	_gameObjectsMap.emplace(newGuid, std::make_unique<T>(newGuid, position, rotation, scale, texturePath, spriteSize));
-
-	return _gameObjectsMap[newGuid].get();
-}
-
 void Scene::Destroy(Guid guid)
 {
 	if (_gameObjectsMap.contains(guid))
