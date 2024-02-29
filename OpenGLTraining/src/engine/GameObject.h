@@ -11,6 +11,7 @@ private:
 	Guid _guid;
 	std::unique_ptr<Transform> _transform;
 	std::unique_ptr<SpriteRenderer> _spriteRenderer;
+	std::unique_ptr<Shader> _shader;
 
 public:
 	GameObject(Guid guid, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, const std::string& texturePath, glm::vec3 spriteSize);

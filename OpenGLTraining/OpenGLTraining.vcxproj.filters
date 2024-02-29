@@ -93,6 +93,9 @@
     <ClCompile Include="src\spaceInvaders\scenes\GameScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\spaceInvaders\Core.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">
@@ -1035,6 +1038,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\spaceInvaders\scenes\GameScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\spaceInvaders\Core.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

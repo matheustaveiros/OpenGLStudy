@@ -11,5 +11,7 @@ private:
 
 public:
 	GameScene(const std::string& name);
+	void SpawnPlayer();
+	void SpawnEnemies();
 };
 

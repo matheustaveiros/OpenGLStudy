@@ -14,16 +14,19 @@
 #include "VertexBufferLayout.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "Core.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "imgui/imconfig.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
+
+
 #include "OpenGLTraining.h"
 
 
-int main(void)
+int main()
 {
     GLFWwindow* window;
 
@@ -54,31 +57,31 @@ int main(void)
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    float positions[] = {
-             0.0f, 0.0f, 0.0f, 0.0f, // 0 // Bottom left vertex
-             100.0f, 0.0f, 1.0f, 0.0f, // 1 // Bottom right
-             100.0f, 100.0f, 1.0f, 1.0f, // 2 // Top right
-             0.0f, 100.0f, 0.0f, 1.0f  // 3 // Top left
-    };
+    //float positions[] = {
+    //         0.0f, 0.0f, 0.0f, 0.0f, // 0 // Bottom left vertex
+    //         100.0f, 0.0f, 1.0f, 0.0f, // 1 // Bottom right
+    //         100.0f, 100.0f, 1.0f, 1.0f, // 2 // Top right
+    //         0.0f, 100.0f, 0.0f, 1.0f  // 3 // Top left
+    //};
 
-    unsigned int indices[] = {
-        0, 1, 2,
-        2, 3, 0
-    };
+    //unsigned int indices[] = {
+    //    0, 1, 2,
+    //    2, 3, 0
+    //};
 
     // Set OpenGL behaviour for handling transparency and enable it
     GLCall(glEnable(GL_BLEND));
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
-    VertexArray va{};
-    VertexBuffer vb(positions, 4 * 4 * sizeof(float));
+    //VertexArray va{};
+    //VertexBuffer vb(positions, 4 * 4 * sizeof(float));
 
-    VertexBufferLayout layout;
-    layout.Push<float>(2); // First 2 floats are positions
-    layout.Push<float>(2); // Next 2 floats are UV (texture coordinates)
-    va.AddBuffer(vb, layout);
+    //VertexBufferLayout layout;
+    //layout.Push<float>(2); // First 2 floats are positions
+    //layout.Push<float>(2); // Next 2 floats are UV (texture coordinates)
+    //va.AddBuffer(vb, layout);
 
-    IndexBuffer ib(indices, 6);
+    //IndexBuffer ib(indices, 6);
 
     float leftBorder = 0.0f, rightBorder = 960.0f;
     float bottomBorder = 0.0f, topBorder = 540.0f;
@@ -87,19 +90,19 @@ int main(void)
     glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));//camera position can be changed here
     
 
-    Shader shader("res/shaders/Basic.shader");
-    shader.Bind();
-    shader.SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
+    //Shader shader("res/shaders/Basic.shader");
+    //shader.Bind();
+    //shader.SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
 
-    Texture texture("res/textures/cool_texture.png");
-    texture.Bind(); //must match with slot below
-    shader.SetUniform1i("u_Texture", 0);
-    
+    //Texture texture("res/textures/cool_texture.png");
+    //texture.Bind(); //must match with slot below
+    //shader.SetUniform1i("u_Texture", 0);
+    //
 
-    va.Unbind();
-    vb.Unbind();
-    ib.Unbind();
-    shader.Unbind();
+    //va.Unbind();
+    //vb.Unbind();
+    //ib.Unbind();
+    //shader.Unbind();
 
     /*float r = 0;
     float increment = 0.05f;*/
@@ -116,50 +119,44 @@ int main(void)
     ImGui_ImplOpenGL3_Init(glsl_version);
     ImGui::StyleColorsDark();
 
-    bool show_demo_window = true;
-    bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.0f);
-    glm::vec3 translationA(0, 0, 0);
-    glm::vec3 translationB(100, 0, 0);
-    ImVec4 obj_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+    //bool show_demo_window = true;
+    //bool show_another_window = false;
+    //ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.0f);
+    //glm::vec3 translationA(0, 0, 0);
+    //glm::vec3 translationB(100, 0, 0);
+    //ImVec4 obj_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+    std::unique_ptr<Core> core = std::make_unique<Core>();
+    core->Awake();
+    core->Start();
 
     while (!glfwWindowShouldClose(window))
     {
-        //GLCall(glClearColor(0.5f, 0.5f, 0.5f, 1.f)); //Set BG color
         GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
-        ImGui_ImplOpenGL3_NewFrame();
+       /* ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+        ImGui::NewFrame();*/
 
-        ImGuiTranslationExample(translationA, 0);
-        ImGuiTranslationExample(translationB, 1);
+        core->UpdateInput();
+        core->UpdatePhysics();
+        core->Update();
+        core->Render();
+        
 
-        ImGuiObjectColorExample(obj_color);
 
-        DrawObject(shader, translationA, proj, view, obj_color, renderer, va, ib);
-        DrawObject(shader, translationB, proj, view, obj_color, renderer, va, ib);
+        //ImGui::Render();
 
-        /*if (r > 1.0f)
-            increment = -0.05f;
-        else if (r < 0.0f)
-            increment = 0.05f;
-
-        r += increment;*/
-
-        //ImGuiExample(show_demo_window, show_another_window, clear_color, io);
-        //ImGuiShowAnotherWindowExample(show_another_window);
-
-        ImGui::Render();
         int display_w, display_h;
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
-        glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
 
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        //ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(window);
         glfwPollEvents();
+
+        core->PostRenderUpdate();
     }
 
     ImGui_ImplOpenGL3_Shutdown();

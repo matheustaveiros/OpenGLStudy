@@ -4,9 +4,9 @@ GameObject::GameObject(Guid guid, glm::vec3 position, glm::vec3 rotation, glm::v
 {
 	_guid = guid;
 	_transform = std::make_unique<Transform>(position, rotation, scale);
-	Shader tempShader("res/shaders/Basic.shader");
+	_shader = std::make_unique<Shader>("res/shaders/Basic.shader");
 
-	_spriteRenderer = std::make_unique<SpriteRenderer>(texturePath, spriteSize, _transform.get(), tempShader);
+	_spriteRenderer = std::make_unique<SpriteRenderer>(texturePath, spriteSize, _transform.get(), _shader.get());
 }
 
 GameObject::~GameObject()
@@ -36,6 +36,7 @@ void GameObject::OnUpdate()
 
 void GameObject::OnRender()
 {
+	_spriteRenderer->Draw();
 }
 
 void GameObject::OnPostRenderUpdate()
