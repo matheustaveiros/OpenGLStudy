@@ -96,6 +96,9 @@
     <ClCompile Include="src\spaceInvaders\Core.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\ResourcesLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">
@@ -1041,6 +1044,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\spaceInvaders\Core.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ResourcesLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

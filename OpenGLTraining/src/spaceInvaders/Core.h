@@ -1,5 +1,6 @@
 #pragma once
 #include "scenes/GameScene.h"
+#include <glm/ext/matrix_clip_space.hpp>
 #include <memory>
 class Core
 {
@@ -14,5 +15,8 @@ public:
 	void Update();
 	void Render();
 	void PostRenderUpdate();
+
+	static glm::mat4 Proj;
+	static glm::mat4 View;
 };
 

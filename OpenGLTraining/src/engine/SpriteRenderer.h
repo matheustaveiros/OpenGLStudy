@@ -13,7 +13,7 @@
 class SpriteRenderer
 {
 private:
-	glm::vec3 _size;
+	glm::vec3 _spriteSize;
 	Transform* _transform;
 	Shader* _shader;
 
@@ -23,7 +23,7 @@ private:
 	std::unique_ptr<IndexBuffer> _ibo;
 
 public:
-	SpriteRenderer(const std::string& texturePath, glm::vec3 size, Transform* transform, Shader* shader);
+	SpriteRenderer(const std::string& texturePath, glm::vec3 spriteSize, Transform* transform, Shader* shader);
 	void Draw();
 };
 
