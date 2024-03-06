@@ -17,6 +17,7 @@
 #include "Core.h"
 #include "GameTime.h"
 #include "AppWindow.h"
+#include "Input.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -35,7 +36,6 @@ int main()
     if (!glfwInit())
         return -1;
 
-    const char* glsl_version = "#version 330";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -58,6 +58,9 @@ int main()
     {
         std::cout << "Error initiating GLEW";
     }
+
+    glfwSetKeyCallback(window, KeyCallback);
+    glfwSetFramebufferSizeCallback(window, FramebufferSizeCallback);
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
@@ -122,4 +125,31 @@ int main()
 
     glfwTerminate();
     return 0;
+}
+
+void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
+{
+    // when a user presses the escape key, we set the WindowShouldClose property to true, closing the application
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+    {
+        glfwSetWindowShouldClose(window, true);
+    }
+
+    if (key >= 0 && key < 1024)
+    {
+        if (action == GLFW_PRESS)
+        {
+            Input::SetKeyStatus(key, true);
+        }
+
+        else if (action == GLFW_RELEASE)
+        {
+            Input::SetKeyStatus(key, false);
+        }
+    }
+}
+
+void FramebufferSizeCallback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
 }

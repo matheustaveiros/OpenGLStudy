@@ -3,7 +3,7 @@
 class Player : public GameObject
 {
 private:
-	float _velocity{ 5 };
+	float _velocity{ 300 };
 	float _direction{ 0 };
 
 public:

@@ -2,7 +2,7 @@
 class AppWindow
 {
 public:
-	static int WindowWidth;
-	static int WindowHeight;
+	inline static int WindowWidth;
+	inline static int WindowHeight;
 };
 
