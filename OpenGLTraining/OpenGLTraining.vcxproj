@@ -135,6 +135,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\spaceInvaders\entities\PlayerBullet.cpp" />
+    <ClCompile Include="src\spaceInvaders\entities\Bullet.cpp" />
     <ClCompile Include="src\engine\Input.cpp" />
     <ClCompile Include="src\engine\AppWindow.cpp" />
     <ClCompile Include="src\engine\GameTime.cpp" />
@@ -168,6 +170,8 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\spaceInvaders\entities\PlayerBullet.h" />
+    <ClInclude Include="src\spaceInvaders\entities\Bullet.h" />
     <ClInclude Include="src\engine\Input.h" />
     <ClInclude Include="src\engine\AppWindow.h" />
     <ClInclude Include="src\engine\GameTime.h" />

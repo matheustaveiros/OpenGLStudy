@@ -2,6 +2,7 @@
 
 Scene::Scene(const std::string& name) : _name { name }
 {
+	Scene::ActiveScene = this;
 }
 
 void Scene::Destroy(Guid guid)

@@ -13,6 +13,8 @@ private:
 	std::unordered_map<Guid, std::unique_ptr<GameObject>, GUIDHash> _gameObjectsMap;
 
 public:
+	inline static Scene* ActiveScene;
+
 	Scene(const std::string& name);
 
 	inline std::string_view GetName() { return _name; }

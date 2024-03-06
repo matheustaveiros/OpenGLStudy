@@ -4,10 +4,13 @@
 #include <GLFW/glfw3.h>
 #include "GameTime.h"
 #include "AppWindow.h"
+#include "PlayerBullet.h"
+#include "Scene.h"
 
-Player::Player(Guid guid, glm::vec3 position, glm::vec2 rotation, glm::vec2 scale) 
+Player::Player(Guid guid, glm::vec3 position, glm::vec2 rotation, glm::vec2 scale)
 	: GameObject(guid, position, rotation, scale)
 {
+	_shootTime = ShootDelay;
 	GetSpriteRenderer()->SetSpriteSize({ 32, 32 });
 	TextureLoaderData& textureData = ResourcesLoader::GetTexture("PlayerSprite", "res/textures/fighter.png");
 	GetSpriteRenderer()->SetTexture(textureData.GetTexture(), textureData.Slot);
@@ -43,10 +46,25 @@ void Player::OnUpdateInput()
 		_direction = 0.0f;
 	}
 
-	if (Input::GetKey(GLFW_KEY_SPACE))
+	_shootTime += GameTime::DeltaTime;
+	if (Input::GetKey(GLFW_KEY_SPACE) && _shootTime > ShootDelay)
 	{
-		//Spawn Projectile
+		SpawnProjectile();
+		_shootTime = 0.0f;
 	}
+}
 
-	std::cout << GetTransform()->GetPosition().x << std::endl;
+std::vector<PlayerBullet*> _bullets;
+const float BulletSpawnOffsetX = 14.0f;
+const float BulletSpawnOffsetY = 16.0f;
+void Player::SpawnProjectile()
+{
+	glm::vec3 position = GetTransform()->GetPosition();
+	position.x += BulletSpawnOffsetX;
+	position.y += BulletSpawnOffsetY;
+	glm::vec2 rotation{ 0,0};
+	glm::vec2 scale{ 1,1 };
+
+	PlayerBullet* newBullet = Scene::ActiveScene->Instantiate<PlayerBullet>(position, rotation, scale);
+	_bullets.push_back(newBullet);
 }
