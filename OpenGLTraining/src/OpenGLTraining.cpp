@@ -16,6 +16,7 @@
 #include "Texture.h"
 #include "Core.h"
 #include "GameTime.h"
+#include "AppWindow.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -39,7 +40,9 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(960, 540, "Hello World", NULL, NULL);
+    AppWindow::WindowHeight = 540;
+    AppWindow::WindowWidth = 960;
+    window = glfwCreateWindow(AppWindow::WindowWidth, AppWindow::WindowHeight, "Hello World", NULL, NULL);
 
     if (!window)
     {
