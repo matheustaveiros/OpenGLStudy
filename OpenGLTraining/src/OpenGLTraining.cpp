@@ -15,6 +15,7 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Core.h"
+#include "GameTime.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -57,93 +58,46 @@ int main()
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    //float positions[] = {
-    //         0.0f, 0.0f, 0.0f, 0.0f, // 0 // Bottom left vertex
-    //         100.0f, 0.0f, 1.0f, 0.0f, // 1 // Bottom right
-    //         100.0f, 100.0f, 1.0f, 1.0f, // 2 // Top right
-    //         0.0f, 100.0f, 0.0f, 1.0f  // 3 // Top left
-    //};
-
-    //unsigned int indices[] = {
-    //    0, 1, 2,
-    //    2, 3, 0
-    //};
-
     // Set OpenGL behaviour for handling transparency and enable it
     GLCall(glEnable(GL_BLEND));
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
-    //VertexArray va{};
-    //VertexBuffer vb(positions, 4 * 4 * sizeof(float));
-
-    //VertexBufferLayout layout;
-    //layout.Push<float>(2); // First 2 floats are positions
-    //layout.Push<float>(2); // Next 2 floats are UV (texture coordinates)
-    //va.AddBuffer(vb, layout);
-
-    //IndexBuffer ib(indices, 6);
-
-    float leftBorder = 0.0f, rightBorder = 960.0f;
-    float bottomBorder = 0.0f, topBorder = 540.0f;
-    float zNear = -1.0f, zFar = 1.0f;
-    glm::mat4 proj = glm::ortho(leftBorder, rightBorder, bottomBorder, topBorder, zNear, zFar);
-    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));//camera position can be changed here
-    
-
-    //Shader shader("res/shaders/Basic.shader");
-    //shader.Bind();
-    //shader.SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
-
-    //Texture texture("res/textures/cool_texture.png");
-    //texture.Bind(); //must match with slot below
-    //shader.SetUniform1i("u_Texture", 0);
-    //
-
-    //va.Unbind();
-    //vb.Unbind();
-    //ib.Unbind();
-    //shader.Unbind();
-
-    /*float r = 0;
-    float increment = 0.05f;*/
-
-    Renderer renderer;
-
     // Setup Platform/Renderer backends
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init(glsl_version);
-    ImGui::StyleColorsDark();
+    //IMGUI_CHECKVERSION();
+    //ImGui::CreateContext();
+    //ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    //ImGui_ImplGlfw_InitForOpenGL(window, true);
+    //ImGui_ImplOpenGL3_Init(glsl_version);
+    //ImGui::StyleColorsDark();
 
-    //bool show_demo_window = true;
-    //bool show_another_window = false;
-    //ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.0f);
-    //glm::vec3 translationA(0, 0, 0);
-    //glm::vec3 translationB(100, 0, 0);
-    //ImVec4 obj_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+    Core core{};
+    core.Awake();
+    core.Start();
 
-    std::unique_ptr<Core> core = std::make_unique<Core>();
-    core->Awake();
-    core->Start();
+    float deltaTime = 0.0f;
+    float lastFrame = 0.0f;
 
     while (!glfwWindowShouldClose(window))
     {
+        const float currentFrame = static_cast<float>(glfwGetTime());
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+        GameTime::Time = currentFrame;
+        GameTime::DeltaTime = deltaTime;
+
         GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
        /* ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();*/
 
-        core->UpdateInput();
-        core->UpdatePhysics();
-        core->Update();
-        core->Render();
-        
-
+        core.UpdateInput();
+        core.UpdatePhysics();
+        core.Update();
+        core.Render();
 
         //ImGui::Render();
 
@@ -156,85 +110,13 @@ int main()
         glfwSwapBuffers(window);
         glfwPollEvents();
 
-        core->PostRenderUpdate();
+        core.PostRenderUpdate();
     }
 
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
+    //ImGui_ImplOpenGL3_Shutdown();
+    //ImGui_ImplGlfw_Shutdown();
+    //ImGui::DestroyContext();
 
     glfwTerminate();
     return 0;
-}
-
-void DrawObject(Shader& shader, glm::vec3& translation, glm::mat4& proj, glm::mat4& view, ImVec4& obj_color, Renderer& renderer, VertexArray& va, IndexBuffer& ib)
-{
-    {//obj 1
-        shader.Bind();
-
-        glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
-        glm::mat4 mvp = proj * view * model;
-
-        shader.SetUniform4f("u_Color", obj_color.x, obj_color.y, obj_color.z, obj_color.w);
-        shader.SetUniformMat4f("u_MVP", mvp);
-        renderer.Draw(va, ib, shader);
-    }
-}
-
-void ImGuiObjectColorExample(ImVec4& obj_color)
-{
-    {
-        ImGui::Begin("Hello, Color");
-        ImGui::Text("Object Color");
-        ImGui::ColorEdit4("obj color", (float*)&obj_color);
-        ImGui::End();
-    }
-}
-
-void ImGuiTranslationExample(glm::vec3& translation, int id)
-{
-    ImGui::Begin("Hello, translations! " + id);
-    ImGui::SliderFloat("Translation X " + id, &translation.x, 0.0f, 860.0f); //extracting 100 from screen values because of the object "size" on VertexBuffer
-    ImGui::SliderFloat("Translation Y " + id, &translation.y, 0.0f, 440.0f);
-    ImGui::End();
-}
-
-void ImGuiShowAnotherWindowExample(bool& show_another_window)
-{
-    // 3. Show another simple window.
-    if (show_another_window)
-    {
-        ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-        ImGui::Text("Hello from another window!");
-        if (ImGui::Button("Close Me"))
-            show_another_window = false;
-        ImGui::End();
-    }
-}
-
-void ImGuiExample(bool& show_demo_window, bool& show_another_window, ImVec4& clear_color, ImGuiIO& io)
-{
-    if (show_demo_window)
-        ImGui::ShowDemoWindow(&show_demo_window);
-
-    {
-        static float f = 0.0f;
-        static int counter = 0;
-
-        ImGui::Begin("Hello, demo options!");                          // Create a window called "Hello, world!" and append into it.
-
-        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-        ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-        ImGui::Checkbox("Another Window", &show_another_window);
-
-        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-        ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-            counter++;
-        ImGui::SameLine();
-        ImGui::Text("counter = %d", counter);
-        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-        ImGui::End();
-    }
 }

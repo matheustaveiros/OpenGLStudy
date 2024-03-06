@@ -14,7 +14,7 @@ private:
 	std::unique_ptr<Shader> _shader;
 
 public:
-	GameObject(Guid guid, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, const std::string& texturePath, glm::vec3 spriteSize);
+	GameObject(Guid guid, glm::vec3 position, glm::vec2 rotation, glm::vec2 scale);
 	~GameObject();
 	inline Guid GetGuid() const { return _guid; }
 	inline Transform* GetTransform() { return _transform.get(); }

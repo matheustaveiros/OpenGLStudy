@@ -1,5 +1,10 @@
 #include "Enemy.h"
-Enemy::Enemy(Guid guid, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, const std::string& texturePath, glm::vec3 spriteSize)
-	: GameObject(guid, position, rotation, scale, texturePath, spriteSize)
+#include "ResourcesLoader.h"
+
+Enemy::Enemy(Guid guid, glm::vec3 position, glm::vec2 rotation, glm::vec2 scale)
+	: GameObject(guid, position, rotation, scale)
 {
+	GetSpriteRenderer()->SetSpriteSize({ 30, 24 });
+	TextureLoaderData& textureData = ResourcesLoader::GetTexture("EnemySprite", "res/textures/invader.png");
+	GetSpriteRenderer()->SetTexture(textureData.GetTexture(), textureData.Slot);
 }

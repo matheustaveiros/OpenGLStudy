@@ -1,22 +1,14 @@
 #include "SpriteRenderer.h"
-#include "..\Renderer.h"
+#include "../Renderer.h"
 #include "glm/ext/matrix_transform.hpp"
 #include <glm/ext/matrix_clip_space.hpp>
 #include "Core.h"
 
-SpriteRenderer::SpriteRenderer(const std::string& texturePath, glm::vec3 spriteSize, Transform* transform, Shader* shader)
+SpriteRenderer::SpriteRenderer(Transform* transform, Shader* shader)
 {
     _vao = std::make_unique<VertexArray>();
-	_texture = std::make_unique<Texture>(texturePath);
 	_shader = shader;
-	_spriteSize = spriteSize;
 	_transform = transform;
-
-    _texture->Bind();
-    shader->Bind();
-    shader->SetUniform1i("u_Texture", 0);
-    shader->Unbind();
-
 
     float vertices[] =
     {
@@ -43,8 +35,21 @@ SpriteRenderer::SpriteRenderer(const std::string& texturePath, glm::vec3 spriteS
     _ibo = std::make_unique<IndexBuffer>(indices, 6);
 }
 
+void SpriteRenderer::SetTexture(const Texture* texture, unsigned int slot)
+{
+    _textureSlot = slot;
+    _texture = texture;
+    _shader->Bind();
+    _texture->Bind(_textureSlot);
+    _shader->SetUniform1i("u_Texture", slot);
+    _shader->Unbind();
+}
+
 void SpriteRenderer::Draw()
 {
+    if (_texture == nullptr)
+        return;
+
     glm::mat4 model{ 1.f };
     model = glm::translate(model, _transform->GetPosition());
 
@@ -58,9 +63,9 @@ void SpriteRenderer::Draw()
 
     _shader->Bind();
     _shader->SetUniformMat4f("u_MVP", Core::Proj * Core::View * model);
-    _shader->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
+    _shader->SetUniform4f("u_Color", _color.r, _color.g, _color.b, _color.a);
 
-    _texture->Bind(0);
+    _texture->Bind(_textureSlot);
 
     _vao->Bind();
     GLCall(glDrawElements(GL_TRIANGLES, _ibo->GetCount(), GL_UNSIGNED_INT, nullptr));

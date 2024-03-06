@@ -5,18 +5,18 @@ class Transform
 {
 private:
 	glm::vec3 _position;
-	glm::vec3 _rotation;
-	glm::vec3 _scale;
+	glm::vec2 _rotation;
+	glm::vec2 _scale;
 
 public:
-	Transform(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+	Transform(glm::vec3 position, glm::vec2 rotation, glm::vec2 scale);
 
 	inline const glm::vec3 GetPosition() const { return _position; }
-	inline const glm::vec3 GetRotation() const { return _rotation; }
-	inline const glm::vec3 GetScale() const { return _scale; }
+	inline const glm::vec2 GetRotation() const { return _rotation; }
+	inline const glm::vec2 GetScale() const { return _scale; }
 
 	inline void SetPosition(glm::vec3 position) { _position = position; }
-	inline void SetRotation(glm::vec3 rotation) { _rotation = rotation; }
-	inline void SetScale(glm::vec3 scale) { _scale = scale; }
+	inline void SetRotation(glm::vec2 rotation) { _rotation = rotation; }
+	inline void SetScale(glm::vec2 scale) { _scale = scale; }
 };
 

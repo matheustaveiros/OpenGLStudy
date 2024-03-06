@@ -135,6 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\GameTime.cpp" />
     <ClCompile Include="src\engine\ResourcesLoader.cpp" />
     <ClCompile Include="src\spaceInvaders\Core.cpp" />
     <ClCompile Include="src\spaceInvaders\scenes\GameScene.cpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\GameTime.h" />
     <ClInclude Include="src\engine\ResourcesLoader.h" />
     <ClInclude Include="src\spaceInvaders\Core.h" />
     <ClInclude Include="src\spaceInvaders\scenes\GameScene.h" />

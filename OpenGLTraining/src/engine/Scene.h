@@ -18,7 +18,7 @@ public:
 	inline std::string_view GetName() { return _name; }
 
 	template <typename T>
-	T* Instantiate(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, const std::string& texturePath, glm::vec3 spriteSize);
+	T* Instantiate(glm::vec3 position, glm::vec2 rotation, glm::vec2 scale);
 	void Destroy(Guid guid);
 
 	void Awake();
@@ -31,10 +31,10 @@ public:
 };
 
 template<typename T>
-T* Scene::Instantiate(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, const std::string& texturePath, glm::vec3 spriteSize)
+T* Scene::Instantiate(glm::vec3 position, glm::vec2 rotation, glm::vec2 scale)
 {
 	Guid newGuid{};
-	_gameObjectsMap.emplace(newGuid, std::make_unique<T>(newGuid, position, rotation, scale, texturePath, spriteSize));
+	_gameObjectsMap.emplace(newGuid, std::make_unique<T>(newGuid, position, rotation, scale));
 
 	return dynamic_cast<T*>(_gameObjectsMap[newGuid].get());
 }
