@@ -13,11 +13,11 @@
 class SpriteRenderer
 {
 private:
-	glm::vec2 _spriteSize;
+	glm::vec2 _spriteSize{ 100.0f, 100.0f };
 	Transform* _transform;
 	Shader* _shader;
 	const Texture* _texture;
-	unsigned int _textureSlot;
+	unsigned int _textureSlot{ 0 };
 	glm::vec4 _color{ 1.0f,1.0f,1.0f,1.0f };
 
 	std::unique_ptr<VertexArray> _vao;

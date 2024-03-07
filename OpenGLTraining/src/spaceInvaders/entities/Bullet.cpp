@@ -9,6 +9,10 @@ void Bullet::SetBulletSprite(const std::string& textureKey, const std::string& t
 	GetSpriteRenderer()->SetTexture(textureData.GetTexture(), textureData.Slot);
 }
 
+Bullet::Bullet(Guid guid) : GameObject(guid)
+{
+}
+
 Bullet::Bullet(Guid guid, glm::vec3 position, glm::vec2 rotation, glm::vec2 scale)
 	: GameObject(guid, position, rotation, scale)
 {

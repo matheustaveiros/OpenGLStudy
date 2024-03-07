@@ -135,6 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\ObjectPooling.cpp" />
     <ClCompile Include="src\spaceInvaders\entities\PlayerBullet.cpp" />
     <ClCompile Include="src\spaceInvaders\entities\Bullet.cpp" />
     <ClCompile Include="src\engine\Input.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\ObjectPooling.h" />
     <ClInclude Include="src\spaceInvaders\entities\PlayerBullet.h" />
     <ClInclude Include="src\spaceInvaders\entities\Bullet.h" />
     <ClInclude Include="src\engine\Input.h" />

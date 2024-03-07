@@ -114,6 +114,9 @@
     <ClCompile Include="src\spaceInvaders\entities\PlayerBullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\ObjectPooling.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">
@@ -1077,6 +1080,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\spaceInvaders\entities\PlayerBullet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ObjectPooling.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

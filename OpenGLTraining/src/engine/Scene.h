@@ -17,10 +17,14 @@ public:
 
 	Scene(const std::string& name);
 
-	inline std::string_view GetName() { return _name; }
+	inline std::string_view GetName() const { return _name; }
+
+	template <typename T>
+	T* Instantiate();
 
 	template <typename T>
 	T* Instantiate(glm::vec3 position, glm::vec2 rotation, glm::vec2 scale);
+
 	void Destroy(Guid guid);
 
 	void Awake();
@@ -33,6 +37,15 @@ public:
 };
 
 template<typename T>
+T* Scene::Instantiate()
+{
+	Guid newGuid{};
+	_gameObjectsMap.emplace(newGuid, std::make_unique<T>(newGuid));
+
+	return dynamic_cast<T*>(_gameObjectsMap[newGuid].get());
+}
+
+template<typename T>
 T* Scene::Instantiate(glm::vec3 position, glm::vec2 rotation, glm::vec2 scale)
 {
 	Guid newGuid{};
@@ -40,4 +53,3 @@ T* Scene::Instantiate(glm::vec3 position, glm::vec2 rotation, glm::vec2 scale)
 
 	return dynamic_cast<T*>(_gameObjectsMap[newGuid].get());
 }
-
