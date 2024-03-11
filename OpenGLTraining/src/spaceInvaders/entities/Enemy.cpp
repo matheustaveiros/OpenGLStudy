@@ -19,3 +19,10 @@ Enemy::Enemy(Guid guid, glm::vec3 position, glm::vec2 rotation, glm::vec2 scale)
 {
 	InitialConfig();
 }
+
+void Enemy::OnCollisionEnter(GameObject* other)
+{
+	SetActive(false);
+	other->SetActive(false);
+	//spawn explosion
+}

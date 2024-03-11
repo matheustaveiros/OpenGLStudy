@@ -43,7 +43,8 @@ void GameObject::OnUpdate()
 
 void GameObject::OnRender()
 {
-	_spriteRenderer->Draw();
+	if(IsActive())
+		_spriteRenderer->Draw();
 }
 
 void GameObject::OnPostRenderUpdate()

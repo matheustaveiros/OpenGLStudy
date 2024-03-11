@@ -23,6 +23,7 @@ void EnemyManager::SpawnEnemies()
 
 		Enemy* newEnemy = _enemyPool.GetObject();
 		newEnemy->GetTransform()->SetPosition(enemyPosition);
+		newEnemy->SetActive(true);
 
 		enemyPosition.x += enemySpriteSize.x + enemyOffsetX;
 	}

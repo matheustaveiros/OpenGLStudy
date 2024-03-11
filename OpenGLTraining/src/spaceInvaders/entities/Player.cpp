@@ -95,6 +95,7 @@ void Player::SpawnProjectile()
 	position.y += BulletSpawnOffsetY;
 	
 	newBullet->GetTransform()->SetPosition(position);
+	newBullet->SetActive(true);
 }
 
 void Player::OnHitByEnemy()
