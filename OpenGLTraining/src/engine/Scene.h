@@ -28,12 +28,19 @@ public:
 	void Destroy(Guid guid);
 
 	void Awake();
+	virtual void OnAwake();
 	void Start();
+	virtual void OnStart();
 	void UpdateInput();
+	virtual void OnUpdateInput();
 	void UpdatePhysics();
+	virtual void OnUpdatePhysics();
 	void Update();
+	virtual void OnUpdate();
 	void Render();
+	virtual void OnRender();
 	void PostRenderUpdate();
+	virtual void OnPostRenderUpdate();
 };
 
 template<typename T>

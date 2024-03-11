@@ -1,17 +1,17 @@
 #pragma once
 #include "Scene.h"
 #include <entities/Player.h>
-#include <entities/Enemy.h>
+#include "entities/EnemyManager.h"
 
 class GameScene : public Scene
 {
 private:
 	Player* _player;
-	std::vector<Enemy*> _enemies;
+	EnemyManager _enemyManager;
 
 public:
 	GameScene(const std::string& name);
 	void SpawnPlayer();
-	void SpawnEnemies();
+	void OnUpdate() override;
 };
 

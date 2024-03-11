@@ -24,7 +24,11 @@ void Scene::Awake()
 	{
 		obj.second.get()->OnAwake();
 	}
+
+	OnAwake();
 }
+
+void Scene::OnAwake(){}
 
 void Scene::Start()
 {
@@ -32,7 +36,11 @@ void Scene::Start()
 	{
 		obj.second.get()->OnStart();
 	}
+
+	OnStart();
 }
+
+void Scene::OnStart(){}
 
 void Scene::UpdateInput()
 {
@@ -40,7 +48,11 @@ void Scene::UpdateInput()
 	{
 		obj.second.get()->OnUpdateInput();
 	}
+
+	OnUpdateInput();
 }
+
+void Scene::OnUpdateInput(){}
 
 void Scene::UpdatePhysics()
 {
@@ -48,7 +60,11 @@ void Scene::UpdatePhysics()
 	{
 		obj.second.get()->OnUpdatePhysics();
 	}
+
+	OnUpdatePhysics();
 }
+
+void Scene::OnUpdatePhysics(){}
 
 void Scene::Update()
 {
@@ -56,7 +72,11 @@ void Scene::Update()
 	{
 		obj.second.get()->OnUpdate();
 	}
+
+	OnUpdate();
 }
+
+void Scene::OnUpdate(){}
 
 void Scene::Render()
 {
@@ -64,7 +84,11 @@ void Scene::Render()
 	{
 		obj.second.get()->OnRender();
 	}
+	
+	OnRender();
 }
+
+void Scene::OnRender(){}
 
 void Scene::PostRenderUpdate()
 {
@@ -72,4 +96,8 @@ void Scene::PostRenderUpdate()
 	{
 		obj.second.get()->OnPostRenderUpdate();
 	}
+
+	OnPostRenderUpdate();
 }
+
+void Scene::OnPostRenderUpdate(){}

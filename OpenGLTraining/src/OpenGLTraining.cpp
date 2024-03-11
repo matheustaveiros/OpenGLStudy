@@ -42,7 +42,7 @@ int main()
 
     AppWindow::WindowHeight = 540;
     AppWindow::WindowWidth = 960;
-    window = glfwCreateWindow(AppWindow::WindowWidth, AppWindow::WindowHeight, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(AppWindow::WindowWidth, AppWindow::WindowHeight, "Space Invaders", NULL, NULL);
 
     if (!window)
     {

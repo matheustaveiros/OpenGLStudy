@@ -8,6 +8,7 @@
 class GameObject
 {
 private:
+	bool _isActive{ false };
 	Guid _guid;
 	std::unique_ptr<Transform> _transform;
 	std::unique_ptr<SpriteRenderer> _spriteRenderer;
@@ -20,6 +21,8 @@ public:
 	inline Guid GetGuid() const { return _guid; }
 	inline Transform* GetTransform() { return _transform.get(); }
 	inline SpriteRenderer* GetSpriteRenderer() { return _spriteRenderer.get(); }
+	inline void SetActive(bool state) { _isActive = state; }
+	inline bool IsActive() { return _isActive; }
 
 	virtual void OnAwake();
 	virtual void OnStart();

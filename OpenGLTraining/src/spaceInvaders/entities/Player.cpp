@@ -65,13 +65,12 @@ void Player::ManageBulletsLifetime()
 {
 	for (int i = 0; i < _bulletPool.GetPoolSize(); i++)
 	{
-		std::tuple<bool, PlayerBullet*> kvp = _bulletPool.GetObjectAndState(i);
-		bool isAvailable = std::get<0>(kvp);
-		if (isAvailable == false)
+		auto[isAvailableOnPool, bullet] = _bulletPool.GetObjectAndState(i);
+		if (isAvailableOnPool == false)
 		{
-			if (std::get<1>(kvp)->GetTransform()->GetPosition().y > AppWindow::WindowHeight)
+			if (bullet->GetTransform()->GetPosition().y > AppWindow::WindowHeight)
 			{
-				_bulletPool.Release(std::get<1>(kvp));
+				_bulletPool.Release(bullet);
 			}
 		}
 	}

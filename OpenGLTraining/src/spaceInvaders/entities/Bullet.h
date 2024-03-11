@@ -9,6 +9,7 @@ private:
 protected:
 	void SetBulletSprite(const std::string& textureKey, const std::string& texturePath, glm::vec2 spriteSize);
 	void SetDirection(int direction) { _direction = direction; }
+	void SetVelocity(float velocity) { _velocity = velocity; }
 
 public:
 	Bullet(Guid guid);
