@@ -6,13 +6,13 @@
 class Player : public GameObject
 {
 private:
-	const float ShootDelay{ 0.5f };
+	const float ShootDelay{ 0.7f };
 	const float LeftBorderOffset = 10.0f;
 	const float RightBorderOffset = 40.0f;
 	const float BulletSpawnOffsetX = 14.0f;
 	const float BulletSpawnOffsetY = 16.0f;
 
-	float _velocity{ 300.0f };
+	float _velocity{ 250.0f };
 	float _direction{ 0.0f };
 	float _shootTime{ 0.0f };
 
@@ -24,7 +24,6 @@ private:
 
 	void InitialConfig();
 	void SpawnProjectile();
-	void OnHitByEnemy();
 
 public:
 	Player(Guid guid);

@@ -23,7 +23,6 @@ void EnemyManager::SpawnEnemies()
 
 		Enemy* newEnemy = _enemyPool.GetObject();
 		newEnemy->GetTransform()->SetPosition(enemyPosition);
-		newEnemy->SetActive(true);
 
 		enemyPosition.x += enemySpriteSize.x + enemyOffsetX;
 	}
@@ -41,6 +40,7 @@ void EnemyManager::HandleBulletSpawn()
 	bulletPos.x += BulletSpawnOffsetX;
 	bulletPos.y += BulletSpawnOffsetY;
 	newBullet->GetTransform()->SetPosition(bulletPos);
+	newBullet->SetActive(true);
 }
 
 void EnemyManager::Update()

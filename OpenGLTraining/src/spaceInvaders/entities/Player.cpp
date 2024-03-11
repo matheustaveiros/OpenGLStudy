@@ -67,7 +67,14 @@ void Player::OnUpdateInput()
 
 void Player::OnCollisionEnter(GameObject* other)
 {
-	OnHitByEnemy();
+	other->SetActive(false);
+	_health--;
+	std::cout << "Player was Hit, current Life is: " << std::to_string(_health) << "\n";
+	if (_health < 0)
+	{
+		std::cout << "Game Over\n";
+		SetActive(false);
+	}
 }
 
 void Player::ManageBulletsLifetime()
@@ -96,14 +103,4 @@ void Player::SpawnProjectile()
 	
 	newBullet->GetTransform()->SetPosition(position);
 	newBullet->SetActive(true);
-}
-
-void Player::OnHitByEnemy()
-{
-	_health--;
-	std::cout << "Player was Hit, current Life is: " << std::to_string(_health) << "\n";
-	if (_health < 0)
-	{
-		std::cout << "Game Over\n";
-	}
 }
