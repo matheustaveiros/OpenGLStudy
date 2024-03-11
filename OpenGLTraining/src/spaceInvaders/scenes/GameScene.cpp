@@ -1,7 +1,17 @@
 #include "GameScene.h"
 
+void GameScene::ConfigurePhysicsLayers() const
+{
+	using enum PhysicsLayer::Layer;
+	PhysicsLayer::SetLayerCollision(Default, std::vector<PhysicsLayer::Layer>{Default, Player, Enemy, Scenario});
+	PhysicsLayer::SetLayerCollision(Player, std::vector<PhysicsLayer::Layer>{Enemy, Scenario});
+	PhysicsLayer::SetLayerCollision(Enemy, std::vector<PhysicsLayer::Layer>{Player, Scenario});
+	PhysicsLayer::SetLayerCollision(Scenario, std::vector<PhysicsLayer::Layer>{None});
+}
+
 GameScene::GameScene(const std::string& name) : Scene(name)
 {
+	ConfigurePhysicsLayers();
 	SpawnPlayer();
 	_enemyManager.SpawnEnemies();
 }

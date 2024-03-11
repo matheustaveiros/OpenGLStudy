@@ -8,19 +8,23 @@
 
 Player::Player(Guid guid) : GameObject(guid)
 {
-	_shootTime = ShootDelay;
-	GetSpriteRenderer()->SetSpriteSize({ 32, 32 });
-	TextureLoaderData& textureData = ResourcesLoader::GetTexture("PlayerSprite", "res/textures/fighter.png");
-	GetSpriteRenderer()->SetTexture(textureData.GetTexture(), textureData.Slot);
+	InitialConfig();
 }
 
 Player::Player(Guid guid, glm::vec3 position, glm::vec2 rotation, glm::vec2 scale)
 	: GameObject(guid, position, rotation, scale)
 {
+	InitialConfig();
+}
+
+void Player::InitialConfig()
+{
 	_shootTime = ShootDelay;
 	GetSpriteRenderer()->SetSpriteSize({ 32, 32 });
 	TextureLoaderData& textureData = ResourcesLoader::GetTexture("PlayerSprite", "res/textures/fighter.png");
 	GetSpriteRenderer()->SetTexture(textureData.GetTexture(), textureData.Slot);
+	SetLayer(PhysicsLayer::Layer::Player);
+	_health = MaxHealth;
 }
 
 void Player::OnUpdate()
@@ -61,6 +65,11 @@ void Player::OnUpdateInput()
 	}
 }
 
+void Player::OnCollisionEnter(GameObject* other)
+{
+	OnHitByEnemy();
+}
+
 void Player::ManageBulletsLifetime()
 {
 	for (int i = 0; i < _bulletPool.GetPoolSize(); i++)
@@ -86,4 +95,14 @@ void Player::SpawnProjectile()
 	position.y += BulletSpawnOffsetY;
 	
 	newBullet->GetTransform()->SetPosition(position);
+}
+
+void Player::OnHitByEnemy()
+{
+	_health--;
+	std::cout << "Player was Hit, current Life is: " << std::to_string(_health) << "\n";
+	if (_health < 0)
+	{
+		std::cout << "Game Over\n";
+	}
 }

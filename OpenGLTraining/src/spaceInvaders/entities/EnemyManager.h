@@ -16,6 +16,7 @@ private:
 	const float BulletSpawnOffsetY{ -15.0f };
 
 	Enemy* GetRandomEnemyAlive();
+	void ManageBulletsLifetime();
 
 public:
 	void SpawnEnemies();

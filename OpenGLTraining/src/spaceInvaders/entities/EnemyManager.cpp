@@ -1,6 +1,7 @@
 #include "EnemyManager.h"
 #include "GameTime.h"
 #include "../utils/RandomHelper.h"
+#include <AppWindow.h>
 
 void EnemyManager::SpawnEnemies()
 {
@@ -53,6 +54,8 @@ void EnemyManager::Update()
 		_shootTime = 0.0f;
 		HandleBulletSpawn();
 	}
+
+	ManageBulletsLifetime();
 }
 
 Enemy* EnemyManager::GetRandomEnemyAlive()
@@ -73,4 +76,20 @@ Enemy* EnemyManager::GetRandomEnemyAlive()
 	int random = RandomHelper::Range<int>(0, static_cast<int>(validIndexes.size() - 1));
 
 	return _enemyPool.AccessObjectByIndex(validIndexes[random]);
+}
+
+void EnemyManager::ManageBulletsLifetime()
+{
+	for (int i = 0; i < _enemyBulletPool.GetPoolSize(); i++)
+	{
+		auto [isAvailableOnPool, bullet] = _enemyBulletPool.GetObjectAndState(i);
+		if (isAvailableOnPool == false)
+		{
+			const float bottomOffset = -50.0f;
+			if (bullet->GetTransform()->GetPosition().y < bottomOffset)
+			{
+				_enemyBulletPool.Release(bullet);
+			}
+		}
+	}
 }

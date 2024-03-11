@@ -9,6 +9,8 @@ private:
 	Player* _player;
 	EnemyManager _enemyManager;
 
+	void ConfigurePhysicsLayers() const;
+
 public:
 	GameScene(const std::string& name);
 	void SpawnPlayer();

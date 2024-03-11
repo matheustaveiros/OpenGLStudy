@@ -1,9 +1,12 @@
 #pragma once
 
 #include "Transform.h"
-#include "SpriteRenderer.h"
+#include "../engine/render/SpriteRenderer.h"
 #include "Guid.h"
 #include <memory>
+#include "physics/PhysicsLayer.h"
+#include <iostream>
+#include <typeinfo>
 
 class GameObject
 {
@@ -13,17 +16,21 @@ private:
 	std::unique_ptr<Transform> _transform;
 	std::unique_ptr<SpriteRenderer> _spriteRenderer;
 	std::unique_ptr<Shader> _shader;
+	std::unordered_map<Guid, GameObject*, GUIDHash> _onCollisionList;
+	PhysicsLayer::Layer _layer;
 
 public:
 	GameObject(Guid guid);
 	GameObject(Guid guid, glm::vec3 position, glm::vec2 rotation, glm::vec2 scale);
 	~GameObject();
-	inline Guid GetGuid() const { return _guid; }
-	inline Transform* GetTransform() { return _transform.get(); }
-	inline SpriteRenderer* GetSpriteRenderer() { return _spriteRenderer.get(); }
-	inline void SetActive(bool state) { _isActive = state; }
-	inline bool IsActive() { return _isActive; }
+	Guid GetGuid() const { return _guid; }
+	Transform* GetTransform() { return _transform.get(); }
+	SpriteRenderer* GetSpriteRenderer() { return _spriteRenderer.get(); }
+	void SetActive(bool state) { _isActive = state; }
+	bool IsActive() const { return _isActive; }
+	
 
+	//Lifetime
 	virtual void OnAwake();
 	virtual void OnStart();
 	virtual void OnUpdateInput();
@@ -32,5 +39,28 @@ public:
 	virtual void OnRender();
 	virtual void OnPostRenderUpdate();
 	virtual void OnDestroy();
+
+	//Physics
+	void OnCollide(GameObject* other);
+	void OnExitCollision(GameObject* other);
+	virtual void OnCollisionEnter(GameObject* other);
+	virtual void OnCollisionStay(GameObject* other);
+	virtual void OnCollisionExit(GameObject* other);
+	const PhysicsLayer::Layer& GetLayer() const { return _layer; }
+	void SetLayer(const PhysicsLayer::Layer& layer) { _layer = layer; }
+
+	bool CanCollideWith(const GameObject* other) const
+	{
+		//check in global matrix using this object layer, if the other object layer is in.
+		for (const PhysicsLayer::Layer& layer : PhysicsLayer::GetCollisionLayers(_layer))
+		{
+			if (layer == other->GetLayer())
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
 };
 

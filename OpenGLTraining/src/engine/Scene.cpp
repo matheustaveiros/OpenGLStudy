@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "physics/Collision.h"
 
 Scene::Scene(const std::string& name) : _name { name }
 {
@@ -20,9 +21,9 @@ void Scene::Destroy(Guid guid)
 
 void Scene::Awake()
 {
-	for (auto& obj : _gameObjectsMap)
+	for (const auto& [guid, obj] : _gameObjectsMap)
 	{
-		obj.second.get()->OnAwake();
+		obj.get()->OnAwake();
 	}
 
 	OnAwake();
@@ -32,9 +33,9 @@ void Scene::OnAwake(){}
 
 void Scene::Start()
 {
-	for (auto& obj : _gameObjectsMap)
+	for (const auto& [guid, obj] : _gameObjectsMap)
 	{
-		obj.second.get()->OnStart();
+		obj.get()->OnStart();
 	}
 
 	OnStart();
@@ -44,9 +45,9 @@ void Scene::OnStart(){}
 
 void Scene::UpdateInput()
 {
-	for (auto& obj : _gameObjectsMap)
+	for (const auto& [guid, obj] : _gameObjectsMap)
 	{
-		obj.second.get()->OnUpdateInput();
+		obj.get()->OnUpdateInput();
 	}
 
 	OnUpdateInput();
@@ -56,9 +57,36 @@ void Scene::OnUpdateInput(){}
 
 void Scene::UpdatePhysics()
 {
-	for (auto& obj : _gameObjectsMap)
+	for (const auto&[guid, obj] : _gameObjectsMap)
 	{
-		obj.second.get()->OnUpdatePhysics();
+		GameObject* objPtr = obj.get();
+		if (!objPtr->IsActive())
+			continue;
+
+		for (const auto& [otherGuid, otherObj] : _gameObjectsMap)
+		{
+			GameObject* otherPtr = otherObj.get();
+
+			if (!otherPtr->IsActive())
+				continue;
+
+			if (guid == otherGuid)
+				continue;
+
+			if (!objPtr->CanCollideWith(otherPtr))
+				continue;
+
+			if (Collision::IsColliding(objPtr, otherPtr))
+			{
+				objPtr->OnCollide(otherPtr);
+			}
+			else
+			{
+				objPtr->OnExitCollision(otherPtr);
+			}
+		}
+
+		objPtr->OnUpdatePhysics();
 	}
 
 	OnUpdatePhysics();
@@ -68,9 +96,9 @@ void Scene::OnUpdatePhysics(){}
 
 void Scene::Update()
 {
-	for (auto& obj : _gameObjectsMap)
+	for (const auto& [guid, obj] : _gameObjectsMap)
 	{
-		obj.second.get()->OnUpdate();
+		obj.get()->OnUpdate();
 	}
 
 	OnUpdate();
@@ -80,9 +108,9 @@ void Scene::OnUpdate(){}
 
 void Scene::Render()
 {
-	for (auto& obj : _gameObjectsMap)
+	for (const auto& [guid, obj] : _gameObjectsMap)
 	{
-		obj.second.get()->OnRender();
+		obj.get()->OnRender();
 	}
 	
 	OnRender();
@@ -92,9 +120,9 @@ void Scene::OnRender(){}
 
 void Scene::PostRenderUpdate()
 {
-	for (auto& obj : _gameObjectsMap)
+	for (const auto& [guid, obj] : _gameObjectsMap)
 	{
-		obj.second.get()->OnPostRenderUpdate();
+		obj.get()->OnPostRenderUpdate();
 	}
 
 	OnPostRenderUpdate();

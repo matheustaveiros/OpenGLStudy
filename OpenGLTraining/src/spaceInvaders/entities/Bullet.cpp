@@ -24,7 +24,4 @@ void Bullet::OnUpdate()
 	glm::vec3 position = GetTransform()->GetPosition();
 	position.y += _direction * _velocity * GameTime::DeltaTime;
 	GetTransform()->SetPosition(position);
-
-	//destroy/back to pool if out of bounds
-	//check screen height
 }

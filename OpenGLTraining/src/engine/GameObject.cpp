@@ -53,3 +53,38 @@ void GameObject::OnPostRenderUpdate()
 void GameObject::OnDestroy()
 {
 }
+
+void GameObject::OnCollide(GameObject* other)
+{
+	if (!_onCollisionList.contains(other->GetGuid()))
+	{
+		_onCollisionList.try_emplace(other->GetGuid(), other);
+		OnCollisionEnter(other);
+	}
+	else
+	{
+		OnCollisionStay(other);
+	}
+}
+
+void GameObject::OnExitCollision(GameObject* other)
+{
+	if (_onCollisionList.contains(other->GetGuid()))
+	{
+		auto iterator = _onCollisionList.find(other->GetGuid());
+		_onCollisionList.erase(iterator);
+		OnCollisionExit(other);
+	}
+}
+
+void GameObject::OnCollisionEnter(GameObject* other)
+{	
+}
+
+void GameObject::OnCollisionStay(GameObject* other)
+{	
+}
+
+void GameObject::OnCollisionExit(GameObject* other)
+{
+}

@@ -3,12 +3,12 @@
 #include "glm/glm.hpp"
 #include <memory>
 #include "Transform.h"
-#include "../Texture.h"
-#include "../Shader.h"
-#include "../IndexBuffer.h"
-#include "../VertexArray.h"
-#include "../VertexBuffer.h"
-#include "../VertexBufferLayout.h"
+#include "Texture.h"
+#include "Shader.h"
+#include "IndexBuffer.h"
+#include "VertexArray.h"
+#include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
 
 class SpriteRenderer
 {
@@ -29,6 +29,7 @@ public:
 	void SetSpriteSize(glm::vec2 spriteSize) { _spriteSize = spriteSize; }
 	void SetTexture(const Texture* texture, unsigned int slot);
 	void SetColor(glm::vec4 color) { _color = color; }
+	glm::vec2 GetSpriteSize() const { return _spriteSize; }
 	void Draw();
 };
 

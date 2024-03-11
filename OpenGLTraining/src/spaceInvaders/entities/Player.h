@@ -16,16 +16,22 @@ private:
 	float _direction{ 0.0f };
 	float _shootTime{ 0.0f };
 
+	int _health{ 0 };
+	const int MaxHealth{ 3 };
+
 	ObjectPooling<PlayerBullet> _bulletPool;
 	std::vector <std::shared_ptr<PlayerBullet>> _bullets;
 
+	void InitialConfig();
 	void SpawnProjectile();
+	void OnHitByEnemy();
 
 public:
 	Player(Guid guid);
 	Player(Guid guid, glm::vec3 position, glm::vec2 rotation, glm::vec2 scale);
 	void OnUpdate() override;
 	void OnUpdateInput() override;
+	void OnCollisionEnter(GameObject* other) override;
 
 	void ManageBulletsLifetime();
 };

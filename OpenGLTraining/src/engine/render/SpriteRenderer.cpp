@@ -1,5 +1,5 @@
 #include "SpriteRenderer.h"
-#include "../Renderer.h"
+#include "Renderer.h"
 #include "glm/ext/matrix_transform.hpp"
 #include <glm/ext/matrix_clip_space.hpp>
 #include "Core.h"

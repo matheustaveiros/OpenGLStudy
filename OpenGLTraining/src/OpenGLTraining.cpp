@@ -7,13 +7,13 @@
 #include <string>
 #include <sstream>
 
-#include "Renderer.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "VertexArray.h"
-#include "VertexBufferLayout.h"
-#include "Shader.h"
-#include "Texture.h"
+#include "render/Renderer.h"
+#include "render/VertexBuffer.h"
+#include "render/IndexBuffer.h"
+#include "render/VertexArray.h"
+#include "render/VertexBufferLayout.h"
+#include "render/Shader.h"
+#include "render/Texture.h"
 #include "Core.h"
 #include "GameTime.h"
 #include "AppWindow.h"
