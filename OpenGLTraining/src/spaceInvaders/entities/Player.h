@@ -31,7 +31,8 @@ public:
 	void OnUpdate() override;
 	void OnUpdateInput() override;
 	void OnCollisionEnter(GameObject* other) override;
-
 	void ManageBulletsLifetime();
+	int GetMaxHealth() { return MaxHealth; }
+	int GetCurrentHealth() { return _health; }
 };
 

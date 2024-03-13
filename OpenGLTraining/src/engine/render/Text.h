@@ -12,7 +12,6 @@ class Text : public Drawable
 {
 public:
 	Text();
-	Text(Guid guid);
 
 	void setCharacterSize(float size);
 
@@ -45,6 +44,4 @@ private:
 	VertexBuffer m_VertexBuffer;
 
 	Font* m_Font;
-
-	Guid m_Guid;
 };

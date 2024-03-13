@@ -13,7 +13,6 @@ class Scene
 private:
 	std::string _name;
 	std::unordered_map<Guid, std::unique_ptr<GameObject>, GUIDHash> _gameObjectsMap;
-	std::unordered_map<Guid, std::unique_ptr<Text>, GUIDHash> _textObjectsMap;
 
 public:
 	inline static Scene* ActiveScene;
@@ -27,9 +26,6 @@ public:
 	template <typename T>
 	T* InstantiateGameObject(glm::vec3 position, glm::vec2 rotation, glm::vec2 scale);
 	void DestroyGameObject(Guid guid);
-
-	Text* InstantiateText();
-	void DestroyText(Guid guid);
 
 	void Awake();
 	virtual void OnAwake();

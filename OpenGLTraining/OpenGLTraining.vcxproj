@@ -135,6 +135,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\Screen.cpp" />
+    <ClCompile Include="src\engine\ScreenManager.cpp" />
+    <ClCompile Include="src\spaceInvaders\screens\GameScreen.cpp" />
     <ClCompile Include="src\engine\render\FontManager.cpp" />
     <ClCompile Include="src\engine\audio\SoundEngine.cpp" />
     <ClCompile Include="src\engine\physics\PhysicsLayer.cpp" />
@@ -183,6 +186,9 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\Screen.h" />
+    <ClInclude Include="src\engine\ScreenManager.h" />
+    <ClInclude Include="src\spaceInvaders\screens\GameScreen.h" />
     <ClInclude Include="src\engine\render\FontManager.h" />
     <ClInclude Include="src\engine\audio\SoundEngine.h" />
     <ClInclude Include="src\engine\physics\PhysicsLayer.h" />

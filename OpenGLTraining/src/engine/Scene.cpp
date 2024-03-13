@@ -19,27 +19,6 @@ void Scene::DestroyGameObject(Guid guid)
 	}
 }
 
-Text* Scene::InstantiateText()
-{
-	Guid newGuid{};
-	_textObjectsMap.emplace(newGuid, std::make_unique<Text>(newGuid));
-
-	return _textObjectsMap[newGuid].get();
-}
-
-void Scene::DestroyText(Guid guid)
-{
-	if (_textObjectsMap.contains(guid))
-	{
-		auto iterator = _textObjectsMap.find(guid);
-		_textObjectsMap.erase(iterator);
-	}
-	else
-	{
-		std::cout << "Unable to Destroy object, the object didn't exist in the scene" << std::endl;
-	}
-}
-
 void Scene::Awake()
 {
 	for (const auto& [guid, obj] : _gameObjectsMap)
@@ -134,11 +113,6 @@ void Scene::Render()
 		obj.get()->OnRender();
 	}
 
-	for (const auto& [guid, text] : _textObjectsMap)
-	{
-		text.get()->Draw();
-	}
-	
 	OnRender();
 }
 

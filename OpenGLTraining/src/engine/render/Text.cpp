@@ -24,11 +24,6 @@ Text::Text()
     InitialConfig();
 }
 
-Text::Text(Guid guid) : m_Guid{ guid }
-{
-    InitialConfig();
-}
-
 void Text::setCharacterSize(float size)
 {
     m_Size = size;

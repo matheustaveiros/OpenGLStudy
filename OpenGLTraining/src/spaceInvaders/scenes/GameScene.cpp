@@ -1,6 +1,6 @@
 #include "GameScene.h"
 #include "audio/SoundEngine.h"
-//#include "render/FontManager.h"
+#include "ScreenManager.h"
 
 void GameScene::ConfigurePhysicsLayers() const
 {
@@ -11,15 +11,20 @@ void GameScene::ConfigurePhysicsLayers() const
 	PhysicsLayer::SetLayerCollision(Scenario, std::vector<PhysicsLayer::Layer>{None});
 }
 
+void GameScene::CreateGameUI()
+{
+	_gameScreen = ScreenManager::CreateScreen<GameScreen>("game_screen");
+	_gameScreen->SetPlayerHealth(_player->GetCurrentHealth(), _player->GetMaxHealth());
+	_gameScreen->SetPlayerScore(0);
+}
+
 GameScene::GameScene(const std::string& name) : Scene(name)
 {
 	ConfigurePhysicsLayers();
 	SpawnPlayer();
 	_enemyManager.SpawnEnemies();
 	SoundEngine::Play2DAudio(SoundEngine::Sounds::Music, true);
-
-	/*Text* scoreText = Scene::ActiveScene->InstantiateText();
-	scoreText->setString("Score: 0");*/
+	CreateGameUI();
 }
 
 void GameScene::SpawnPlayer()
