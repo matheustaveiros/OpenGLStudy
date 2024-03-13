@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "ResourcesLoader.h"
+#include <audio/SoundEngine.h>
 
 void Enemy::InitialConfig()
 {
@@ -24,5 +25,6 @@ void Enemy::OnCollisionEnter(GameObject* other)
 {
 	SetActive(false);
 	other->SetActive(false);
-	//spawn explosion
+	
+	SoundEngine::Play2DAudio(SoundEngine::Sounds::Explosion);
 }

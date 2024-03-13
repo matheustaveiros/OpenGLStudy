@@ -5,6 +5,7 @@
 #include "GameTime.h"
 #include "AppWindow.h"
 #include "Scene.h"
+#include "audio/SoundEngine.h"
 
 Player::Player(Guid guid) : GameObject(guid)
 {
@@ -70,6 +71,9 @@ void Player::OnCollisionEnter(GameObject* other)
 	other->SetActive(false);
 	_health--;
 	std::cout << "Player was Hit, current Life is: " << std::to_string(_health) << "\n";
+
+	SoundEngine::Play2DAudio(SoundEngine::Sounds::Explosion);
+
 	if (_health < 0)
 	{
 		std::cout << "Game Over\n";
@@ -103,4 +107,6 @@ void Player::SpawnProjectile()
 	
 	newBullet->GetTransform()->SetPosition(position);
 	newBullet->SetActive(true);
+
+	SoundEngine::Play2DAudio(SoundEngine::Sounds::Shoot);
 }

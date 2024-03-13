@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "audio/SoundEngine.h"
 
 void GameScene::ConfigurePhysicsLayers() const
 {
@@ -14,6 +15,7 @@ GameScene::GameScene(const std::string& name) : Scene(name)
 	ConfigurePhysicsLayers();
 	SpawnPlayer();
 	_enemyManager.SpawnEnemies();
+	SoundEngine::Play2DAudio(SoundEngine::Sounds::Music, true);
 }
 
 void GameScene::SpawnPlayer()

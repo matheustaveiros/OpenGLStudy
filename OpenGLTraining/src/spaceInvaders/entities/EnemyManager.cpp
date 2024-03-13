@@ -2,6 +2,7 @@
 #include "GameTime.h"
 #include "../utils/RandomHelper.h"
 #include <AppWindow.h>
+#include "audio/SoundEngine.h"
 
 void EnemyManager::SpawnEnemies()
 {
@@ -41,6 +42,8 @@ void EnemyManager::HandleBulletSpawn()
 	bulletPos.y += BulletSpawnOffsetY;
 	newBullet->GetTransform()->SetPosition(bulletPos);
 	newBullet->SetActive(true);
+
+	SoundEngine::Play2DAudio(SoundEngine::Sounds::Shoot);
 }
 
 void EnemyManager::Update()

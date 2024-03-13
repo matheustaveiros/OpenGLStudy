@@ -18,6 +18,7 @@
 #include "GameTime.h"
 #include "AppWindow.h"
 #include "Input.h"
+#include "audio/SoundEngine.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -77,6 +78,8 @@ int main()
     //ImGui_ImplGlfw_InitForOpenGL(window, true);
     //ImGui_ImplOpenGL3_Init(glsl_version);
     //ImGui::StyleColorsDark();
+
+    SoundEngine soundEngine{};
 
     Core core{};
     core.Awake();
