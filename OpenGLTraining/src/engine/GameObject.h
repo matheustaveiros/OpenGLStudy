@@ -7,6 +7,7 @@
 #include "physics/PhysicsLayer.h"
 #include <iostream>
 #include <typeinfo>
+#include "render/ShaderManager.h"
 
 class GameObject
 {
@@ -15,7 +16,7 @@ private:
 	Guid _guid;
 	std::unique_ptr<Transform> _transform;
 	std::unique_ptr<SpriteRenderer> _spriteRenderer;
-	std::unique_ptr<Shader> _shader;
+	Shader& _shader{ ShaderManager::GetShader("sprite") };
 	std::unordered_map<Guid, GameObject*, GUIDHash> _onCollisionList;
 	PhysicsLayer::Layer _layer;
 

@@ -21,7 +21,7 @@ public:
     {
         for (int i = 0; i < _pool.size(); i++)
         {
-            Scene::ActiveScene->Destroy(dynamic_cast<GameObject*>(_pool[i])->GetGuid());
+            Scene::ActiveScene->DestroyGameObject(dynamic_cast<GameObject*>(_pool[i])->GetGuid());
         }
     }
 
@@ -44,7 +44,7 @@ public:
             }
         }
 
-        T* newObj = Scene::ActiveScene->Instantiate<T>();
+        T* newObj = Scene::ActiveScene->InstantiateGameObject<T>();
         _pool.push_back(newObj);
         _available.push_back(false);
         return newObj;

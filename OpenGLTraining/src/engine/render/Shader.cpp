@@ -1,173 +1,136 @@
 #include "Shader.h"
-
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
-
 #include "Renderer.h"
+#include <iostream>
 
-Shader::Shader(const std::string& FilePath)
-    : m_FilePath(FilePath), m_RendererID(0)
+Shader::Shader()
 {
-    ShaderProgramSource Source = ParseShader(FilePath);
-    m_RendererID = CreateShader(Source.VertexSource, Source.FragmentSource);
+	GLCall(m_RendererID = glCreateProgram());
 }
 
 Shader::~Shader()
 {
-    // Clean shader after usage so we don't leak on VRAM
-    GLCall(glDeleteProgram(m_RendererID));
+	//GLCall(glDeleteProgram(m_RendererID)); todo
+}
+
+void Shader::SetUniform1i(const std::string& name, int value)
+{
+	GLCall(glUniform1i(GetUniformLocation(name), value));
+}
+
+void Shader::SetUniform3f(const std::string& name, float v0, float v1, float v2)
+{
+	GLCall(glUniform3f(GetUniformLocation(name), v0, v1, v2));
+}
+
+void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3)
+{
+	GLCall(glUniform4f(GetUniformLocation(name), v0, v1, v2, v3));
+}
+
+void Shader::SetUniformMat4f(const std::string& name, const glm::mat4& matrix)
+{
+	GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]));
+}
+
+int Shader::GetUniformLocation(const std::string& name)
+{
+	if (m_Locations.find(name) != m_Locations.end())
+	{
+		return m_Locations[name];
+	}
+	else
+	{
+		GLCall(int location = glGetUniformLocation(m_RendererID, name.c_str()));
+
+		if (location == -1)
+		{
+			std::cout << "ERROR, ShaderProgram::GetUniformLocation could not find " << name << std::endl;
+		}
+
+		m_Locations[name] = location;
+
+		return location;
+	}
+}
+
+void Shader::Compile(const char* vertexSource, const char* fragmentSource, const char* geometrySource)
+{
+	unsigned int sVertex;
+	unsigned int sFragment;
+	unsigned int gShader;
+
+	// vertex Shader
+	sVertex = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(sVertex, 1, &vertexSource, nullptr);
+	glCompileShader(sVertex);
+	checkCompileErrors(sVertex, "VERTEX");
+
+	// fragment Shader
+	sFragment = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(sFragment, 1, &fragmentSource, nullptr);
+	glCompileShader(sFragment);
+	checkCompileErrors(sFragment, "FRAGMENT");
+
+	// if geometry shader source code is given, also compile geometry shader
+	if (geometrySource != nullptr)
+	{
+		gShader = glCreateShader(GL_GEOMETRY_SHADER);
+		glShaderSource(gShader, 1, &geometrySource, nullptr);
+		glCompileShader(gShader);
+		checkCompileErrors(gShader, "GEOMETRY");
+	}
+
+	// shader program
+	m_RendererID = glCreateProgram();
+	glAttachShader(m_RendererID, sVertex);
+	glAttachShader(m_RendererID, sFragment);
+	if (geometrySource != nullptr)
+		glAttachShader(m_RendererID, gShader);
+	glLinkProgram(m_RendererID);
+	checkCompileErrors(m_RendererID, "PROGRAM");
+
+	// delete the shaders as they're linked into our program now and no longer necessary
+	glDeleteShader(sVertex);
+	glDeleteShader(sFragment);
+	if (geometrySource != nullptr)
+		glDeleteShader(gShader);
 }
 
 void Shader::Bind() const
 {
-    GLCall(glUseProgram(m_RendererID));
+	GLCall(glUseProgram(m_RendererID));
 }
 
 void Shader::Unbind() const
 {
-    GLCall(glUseProgram(0));
+	GLCall(glUseProgram(0));
 }
 
-void Shader::SetUniform1f(const std::string& Name, float Value)
+void Shader::checkCompileErrors(unsigned int object, const std::string& type) const
 {
-    GLCall(glUniform1f(GetUniformLocation(Name), Value));
-}
+	int success;
+	char infoLog[1024];
 
-void Shader::SetUniform1i(const std::string& Name, int Value)
-{
-    GLCall(glUniform1i(GetUniformLocation(Name), Value));
-}
-
-// In a more robust solution for a game engine, we would probably have a SetValue method with overloads for different value types
-// to call the proper uniform function 
-void Shader::SetUniform4f(const std::string& Name, float V0, float V1, float V2, float V3)
-{
-    //glUniform4f is to set uniform that receives 4 floats. There are other Uniform functions for other params
-
-    // Location: id of the uniform. When shader is created, every uniform is assigned to an id
-    GLCall(glUniform4f(GetUniformLocation(Name), V0, V1, V2, V3));
-}
-
-void Shader::SetUniformMat4f(const std::string& Name, const glm::mat4& Matrix)
-{
-    GLCall(glUniformMatrix4fv(GetUniformLocation(Name), 1, GL_FALSE, &Matrix[0][0]));
-}
-
-int Shader::GetUniformLocation(const std::string& Name)
-{
-    // Instead of calling glGetUniformLocation every single time we need to set a uniform,
-    // we can increase performance by checking our location cache first
-    if (m_UniformLocationCache.find(Name) != m_UniformLocationCache.end())
-    {
-        return m_UniformLocationCache[Name];
-    }
-
-    GLCall(int Location = glGetUniformLocation(m_RendererID, Name.c_str())); // uniform name needs a C string
-
-    // It might return -1 if the uniform is declared on source code but not used anywhere on the shader and the compiler has removed it
-    // Or if it didn't exist at all
-    if (Location == -1)
-    {
-        std::cout << "Warning: Uniform " << Name << " doesn't exist!";
-    }
-
-    m_UniformLocationCache[Name] = Location;
-
-    return Location;
-}
-
-ShaderProgramSource Shader::ParseShader(const std::string& FilePath)
-{
-    // This is the modern C++ approach of opening a file
-    // In a serious game engine we should consider using the C approach, as it's faster than this
-    std::ifstream Stream(FilePath);
-
-    enum class ShaderType
-    {
-        NONE = -1, VERTEX = 0, FRAGMENT = 1
-    };
-
-    std::string Line;
-    std::stringstream Ss[2]; // One for the vertex shader [0] and other for the fragment [1]
-    ShaderType Type = ShaderType::NONE;
-
-    while (getline(Stream, Line))
-    {
-        // #shader is a custom token we are using to separate the shaders
-        if (Line.find("#shader") != std::string::npos)
-        {
-            if (Line.find("vertex") != std::string::npos)
-            {
-                Type = ShaderType::VERTEX;
-            }
-            else if (Line.find("fragment") != std::string::npos)
-            {
-                Type = ShaderType::FRAGMENT;
-            }
-        }
-        else
-        {
-            Ss[(int)Type] << Line << "\n";
-        }
-    }
-
-    return { Ss[0].str(), Ss[1].str() };
-}
-
-// Takes source code of each shader and compile into shaders
-unsigned int Shader::CreateShader(const std::string& VertexShader, const std::string& FragmentShader)
-{
-    // It's recommended to using the C++ type, like unsigned int, instead of the OpenGL defined
-    // so when dealing with multiple APIs you don't need to include OpenGL on the header or so
-    GLCall(unsigned int Program = glCreateProgram());
-    unsigned int Vs = CompileShader(GL_VERTEX_SHADER, VertexShader);
-    unsigned int Fs = CompileShader(GL_FRAGMENT_SHADER, FragmentShader);
-
-    // Link both shaders into the program 
-    GLCall(glAttachShader(Program, Vs));
-    GLCall(glAttachShader(Program, Fs));
-    GLCall(glLinkProgram(Program));
-    GLCall(glValidateProgram(Program));
-
-    // Delete the intermediate shaders as they are now compiled into program
-    GLCall(glDeleteShader(Vs));
-    GLCall(glDeleteShader(Fs));
-
-    return Program;
-}
-
-unsigned int Shader::CompileShader(unsigned int Type, const std::string& Source)
-{
-    GLCall(unsigned int Id = glCreateShader(Type));
-    const char* Src = Source.c_str();
-
-    // Shader Id
-    // Number of source codes
-    // Pointer to the C string source code
-    // The length of source code in case we are providing multiples, nullptr if just one
-    GLCall(glShaderSource(Id, 1, &Src, nullptr));
-    GLCall(glCompileShader(Id));
-
-    int result;
-    GLCall(glGetShaderiv(Id, GL_COMPILE_STATUS, &result));
-
-    if (result == GL_FALSE)
-    {
-        int length;
-        GLCall(glGetShaderiv(Id, GL_INFO_LOG_LENGTH, &length));
-        char* message = (char*)alloca(length * sizeof(char)); // To hack doing this to allocate on stack: char message[length];
-        GLCall(glGetShaderInfoLog(Id, length, &length, message));
-
-        std::cout << "Failed to compile " << (Type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader!\n";
-        std::cout << message << "\n";
-
-        // Delete shader as the compilation didn't work out
-        GLCall(glDeleteShader(Id));
-
-        return 0;
-    }
-
-    return Id;
+	if (type != "PROGRAM")
+	{
+		glGetShaderiv(object, GL_COMPILE_STATUS, &success);
+		if (!success)
+		{
+			glGetShaderInfoLog(object, 1024, NULL, infoLog);
+			std::cout << "| ERROR::SHADER: Compile-time error: Type: " << type << "\n"
+				<< infoLog << "\n -- --------------------------------------------------- -- "
+				<< std::endl;
+		}
+	}
+	else
+	{
+		glGetProgramiv(object, GL_LINK_STATUS, &success);
+		if (!success)
+		{
+			glGetProgramInfoLog(object, 1024, NULL, infoLog);
+			std::cout << "| ERROR::Shader: Link-time error: Type: " << type << "\n"
+				<< infoLog << "\n -- --------------------------------------------------- -- "
+				<< std::endl;
+		}
+	}
 }

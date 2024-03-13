@@ -5,12 +5,15 @@
 #include <unordered_map>
 #include "GameObject.h"
 #include "Guid.h"
+#include "render/Text.h"
 #include "glm/glm.hpp"
+
 class Scene
 {
 private:
 	std::string _name;
 	std::unordered_map<Guid, std::unique_ptr<GameObject>, GUIDHash> _gameObjectsMap;
+	std::unordered_map<Guid, std::unique_ptr<Text>, GUIDHash> _textObjectsMap;
 
 public:
 	inline static Scene* ActiveScene;
@@ -20,12 +23,13 @@ public:
 	inline std::string_view GetName() const { return _name; }
 
 	template <typename T>
-	T* Instantiate();
-
+	T* InstantiateGameObject();
 	template <typename T>
-	T* Instantiate(glm::vec3 position, glm::vec2 rotation, glm::vec2 scale);
+	T* InstantiateGameObject(glm::vec3 position, glm::vec2 rotation, glm::vec2 scale);
+	void DestroyGameObject(Guid guid);
 
-	void Destroy(Guid guid);
+	Text* InstantiateText();
+	void DestroyText(Guid guid);
 
 	void Awake();
 	virtual void OnAwake();
@@ -44,7 +48,7 @@ public:
 };
 
 template<typename T>
-T* Scene::Instantiate()
+T* Scene::InstantiateGameObject()
 {
 	Guid newGuid{};
 	_gameObjectsMap.emplace(newGuid, std::make_unique<T>(newGuid));
@@ -53,7 +57,7 @@ T* Scene::Instantiate()
 }
 
 template<typename T>
-T* Scene::Instantiate(glm::vec3 position, glm::vec2 rotation, glm::vec2 scale)
+T* Scene::InstantiateGameObject(glm::vec3 position, glm::vec2 rotation, glm::vec2 scale)
 {
 	Guid newGuid{};
 	_gameObjectsMap.emplace(newGuid, std::make_unique<T>(newGuid, position, rotation, scale));

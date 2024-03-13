@@ -1,38 +1,33 @@
 #pragma once
-#include <string>
+#include <iostream>
 #include <unordered_map>
-#include "glm/glm.hpp"
-
-struct ShaderProgramSource
-{
-    std::string VertexSource;
-    std::string FragmentSource;
-};
+#include <vector>
+#include <glm/glm.hpp>
 
 class Shader
 {
 public:
+	Shader();
+	~Shader();
 
-    Shader(const std::string& FilePath);
-    ~Shader();
+	void SetUniform1i(const std::string& name, int value);
+	void SetUniform3f(const std::string& name, float v0, float v1, float v2);
+	void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
+	void SetUniformMat4f(const std::string& name, const glm::mat4& matrix);
 
-    void Bind() const;
-    void Unbind() const;
+	int GetUniformLocation(const std::string& name);
 
-    //Set uniforms
-    void SetUniform1f(const std::string& Name, float Value);
-    void SetUniform1i(const std::string& Name, int Value);
-    void SetUniform4f(const std::string& Name, float V0, float V1, float V2, float V3);
-    void SetUniformMat4f(const std::string& Name, const glm::mat4& Matrix);
+	void Compile(const char* vertexSource, const char* fragmentSource, const char* geometrySource = nullptr);
+
+	void Bind() const;
+	void Unbind() const;
+
+	inline unsigned int GetID() const { return m_RendererID; }
 
 private:
+	unsigned int m_RendererID;
 
-    unsigned int m_RendererID;
-    std::string m_FilePath; // For debugging purpose
-    std::unordered_map<std::string, int> m_UniformLocationCache; // Hash table/map
+	std::unordered_map<std::string, int> m_Locations;
 
-    ShaderProgramSource ParseShader(const std::string& FilePath);
-    unsigned int CreateShader(const std::string& VertexShader, const std::string& FragmentShader);
-    unsigned int CompileShader(unsigned int Type, const std::string& Source);
-    int GetUniformLocation(const std::string& Name);
+	void checkCompileErrors(unsigned int object, const std::string& type) const;
 };

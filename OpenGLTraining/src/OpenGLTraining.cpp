@@ -19,6 +19,8 @@
 #include "AppWindow.h"
 #include "Input.h"
 #include "audio/SoundEngine.h"
+#include "render/ShaderManager.h"
+#include "render/FontManager.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -80,6 +82,14 @@ int main()
     //ImGui::StyleColorsDark();
 
     SoundEngine soundEngine{};
+
+    Shader spriteShader = ShaderManager::LoadShader("res/shaders/sprite.vs", "res/shaders/sprite.frag", nullptr, "sprite");
+    Shader textShader = ShaderManager::LoadShader("res/shaders/text_2d.vs", "res/shaders/text_2d.fs", nullptr, "text");
+    textShader.Bind();
+    textShader.SetUniformMat4f("projection", glm::ortho(0.0f, static_cast<float>(AppWindow::WindowWidth), static_cast<float>(AppWindow::WindowHeight), 0.0f));
+    textShader.SetUniform1i("text", 0);
+
+    FontManager::CreateFont("default", "res/fonts/Roboto-Bold.ttf", 12);
 
     Core core{};
     core.Awake();

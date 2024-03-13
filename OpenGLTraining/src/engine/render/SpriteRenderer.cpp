@@ -4,11 +4,9 @@
 #include <glm/ext/matrix_clip_space.hpp>
 #include "Core.h"
 
-SpriteRenderer::SpriteRenderer(Transform* transform, Shader* shader)
+SpriteRenderer::SpriteRenderer(Transform* transform, Shader& shader) : _transform{ transform }, _shader { shader }
 {
     _vao = std::make_unique<VertexArray>();
-	_shader = shader;
-	_transform = transform;
 
     float vertices[] =
     {
@@ -39,10 +37,10 @@ void SpriteRenderer::SetTexture(const Texture* texture, unsigned int slot)
 {
     _textureSlot = slot;
     _texture = texture;
-    _shader->Bind();
+    _shader.Bind();
     _texture->Bind(_textureSlot);
-    _shader->SetUniform1i("u_Texture", slot);
-    _shader->Unbind();
+    _shader.SetUniform1i("u_Texture", slot);
+    _shader.Unbind();
 }
 
 void SpriteRenderer::Draw()
@@ -61,9 +59,10 @@ void SpriteRenderer::Draw()
 
     model = glm::scale(model, glm::vec3(size, 1.f));
 
-    _shader->Bind();
-    _shader->SetUniformMat4f("u_MVP", Core::Proj * Core::View * model);
-    _shader->SetUniform4f("u_Color", _color.r, _color.g, _color.b, _color.a);
+    _shader.Bind();
+    _shader.SetUniformMat4f("u_MVP", Core::Proj * Core::View * model);
+    _shader.SetUniform4f("u_Color", _color.r, _color.g, _color.b, _color.a);
+    _shader.SetUniform1i("u_Texture", _textureSlot);
 
     _texture->Bind(_textureSlot);
 

@@ -8,7 +8,7 @@ SoundEngine::SoundEngine()
 	_instance = this;
 
 	_irrklangEngine = irrklang::createIrrKlangDevice();
-	SetMainVolume(0.5f);
+	SetMainVolume(0.1f);
 	ConfigureAudioPaths();
 }
 

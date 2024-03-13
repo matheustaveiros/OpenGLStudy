@@ -15,7 +15,7 @@ class SpriteRenderer
 private:
 	glm::vec2 _spriteSize{ 100.0f, 100.0f };
 	Transform* _transform;
-	Shader* _shader;
+	Shader& _shader;
 	const Texture* _texture;
 	unsigned int _textureSlot{ 0 };
 	glm::vec4 _color{ 1.0f,1.0f,1.0f,1.0f };
@@ -25,7 +25,7 @@ private:
 	std::unique_ptr<IndexBuffer> _ibo;
 
 public:
-	SpriteRenderer(Transform* transform, Shader* shader);
+	SpriteRenderer(Transform* transform, Shader& shader);
 	void SetSpriteSize(glm::vec2 spriteSize) { _spriteSize = spriteSize; }
 	void SetTexture(const Texture* texture, unsigned int slot);
 	void SetColor(glm::vec4 color) { _color = color; }

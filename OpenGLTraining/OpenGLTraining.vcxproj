@@ -104,14 +104,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)OpenGLTraining\src\spaceInvaders;$(SolutionDir)OpenGLTraining\src\engine;$(SolutionDir)OpenGLTraining\vendor;$(SolutionDir)OpenGLTraining\dependencies\GLEW\include;$(SolutionDir)OpenGLTraining\dependencies\GLFW\include;$(SolutionDir)OpenGLTraining\dependencies\irrKlang\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)OpenGLTraining\src\spaceInvaders;$(SolutionDir)OpenGLTraining\src\engine;$(SolutionDir)OpenGLTraining\vendor;$(SolutionDir)OpenGLTraining\dependencies\GLEW\include;$(SolutionDir)OpenGLTraining\dependencies\GLFW\include;$(SolutionDir)OpenGLTraining\dependencies\irrKlang\include;$(SolutionDir)OpenGLTraining\dependencies\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)OpenGLTraining\dependencies\GLEW\lib\Release\x64;$(SolutionDir)OpenGLTraining\dependencies\GLFW\lib-vc2022;$(SolutionDir)OpenGLTraining\dependencies\irrKlang;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies);glfw3.lib;opengl32.lib;glew32s.lib;irrKlang.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)OpenGLTraining\dependencies\GLEW\lib\Release\x64;$(SolutionDir)OpenGLTraining\dependencies\GLFW\lib-vc2022;$(SolutionDir)OpenGLTraining\dependencies\irrKlang;$(SolutionDir)OpenGLTraining\dependencies\freetype;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies);glfw3.lib;opengl32.lib;glew32s.lib;irrKlang.lib;freetype.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -122,7 +122,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)OpenGLTraining\src\spaceInvaders;$(SolutionDir)OpenGLTraining\src\engine;$(SolutionDir)OpenGLTraining\vendor;$(SolutionDir)OpenGLTraining\dependencies\GLEW\include;$(SolutionDir)OpenGLTraining\dependencies\GLFW\include;$(SolutionDir)OpenGLTraining\dependencies\irrKlang\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)OpenGLTraining\src\spaceInvaders;$(SolutionDir)OpenGLTraining\src\engine;$(SolutionDir)OpenGLTraining\vendor;$(SolutionDir)OpenGLTraining\dependencies\GLEW\include;$(SolutionDir)OpenGLTraining\dependencies\GLFW\include;$(SolutionDir)OpenGLTraining\dependencies\irrKlang\include;$(SolutionDir)OpenGLTraining\dependencies\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -130,14 +130,19 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)OpenGLTraining\dependencies\GLEW\lib\Release\x64;$(SolutionDir)OpenGLTraining\dependencies\GLFW\lib-vc2022;$(SolutionDir)OpenGLTraining\dependencies\irrKlang;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies);glfw3.lib;opengl32.lib;glew32s.lib;irrKlang.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)OpenGLTraining\dependencies\GLEW\lib\Release\x64;$(SolutionDir)OpenGLTraining\dependencies\GLFW\lib-vc2022;$(SolutionDir)OpenGLTraining\dependencies\irrKlang;$(SolutionDir)OpenGLTraining\dependencies\freetype;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies);glfw3.lib;opengl32.lib;glew32s.lib;irrKlang.lib;freetype.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\render\FontManager.cpp" />
     <ClCompile Include="src\engine\audio\SoundEngine.cpp" />
     <ClCompile Include="src\engine\physics\PhysicsLayer.cpp" />
     <ClCompile Include="src\engine\physics\Collision.cpp" />
+    <ClCompile Include="src\engine\render\Color.cpp" />
+    <ClCompile Include="src\engine\render\Font.cpp" />
+    <ClCompile Include="src\engine\render\ShaderManager.cpp" />
+    <ClCompile Include="src\engine\render\Text.cpp" />
     <ClCompile Include="src\spaceInvaders\entities\EnemyManager.cpp" />
     <ClCompile Include="src\spaceInvaders\entities\EnemyBullet.cpp" />
     <ClCompile Include="src\engine\ObjectPooling.cpp" />
@@ -178,9 +183,17 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\render\FontManager.h" />
     <ClInclude Include="src\engine\audio\SoundEngine.h" />
     <ClInclude Include="src\engine\physics\PhysicsLayer.h" />
     <ClInclude Include="src\engine\physics\Collision.h" />
+    <ClInclude Include="src\engine\render\Color.h" />
+    <ClInclude Include="src\engine\render\Drawable.h" />
+    <ClInclude Include="src\engine\render\Font.h" />
+    <ClInclude Include="src\engine\render\ShaderManager.h" />
+    <ClInclude Include="src\engine\render\Text.h" />
+    <ClInclude Include="src\engine\render\Vector2f.h" />
+    <ClInclude Include="src\engine\render\Vector2i.h" />
     <ClInclude Include="src\spaceInvaders\entities\EnemyManager.h" />
     <ClInclude Include="src\spaceInvaders\entities\EnemyBullet.h" />
     <ClInclude Include="src\engine\ObjectPooling.h" />
