@@ -8,6 +8,7 @@
 #include "audio/SoundEngine.h"
 #include "EventManager.h"
 #include "events/OnPlayerLoseHealthEvent.h"
+#include "events/OnScoreChangedEvent.h"
 
 Player::Player(Guid guid) : GameObject(guid)
 {
@@ -20,6 +21,11 @@ Player::Player(Guid guid, glm::vec3 position, glm::vec2 rotation, glm::vec2 scal
 	InitialConfig();
 }
 
+Player::~Player()
+{
+	EventManager::Unsubscribe<OnEnemyDestroyedEvent>(std::bind(&Player::OnEnemyDestroyed, this, std::placeholders::_1));
+}
+
 void Player::InitialConfig()
 {
 	_shootTime = ShootDelay;
@@ -28,6 +34,8 @@ void Player::InitialConfig()
 	GetSpriteRenderer()->SetTexture(textureData.GetTexture(), textureData.Slot);
 	SetLayer(PhysicsLayer::Layer::Player);
 	_health = MaxHealth;
+
+	EventManager::Subscribe<OnEnemyDestroyedEvent>(std::bind(&Player::OnEnemyDestroyed, this, std::placeholders::_1));
 }
 
 void Player::OnUpdate()
@@ -92,7 +100,7 @@ void Player::ManageBulletsLifetime()
 		auto[isAvailableOnPool, bullet] = _bulletPool.GetObjectAndState(i);
 		if (isAvailableOnPool == false)
 		{
-			if (bullet->GetTransform()->GetPosition().y > AppWindow::WindowHeight)
+			if (bullet->GetTransform()->GetPosition().y > (float)AppWindow::WindowHeight)
 			{
 				_bulletPool.Release(bullet);
 			}
@@ -113,4 +121,10 @@ void Player::SpawnProjectile()
 	newBullet->SetActive(true);
 
 	SoundEngine::Play2DAudio(SoundEngine::Sounds::Shoot);
+}
+
+void Player::OnEnemyDestroyed(const OnEnemyDestroyedEvent& args)
+{
+	_score += ScorePerKill;
+	EventManager::Dispatch(OnScoreChangedEvent(_score));
 }

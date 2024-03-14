@@ -1,6 +1,8 @@
 #include "Enemy.h"
 #include "ResourcesLoader.h"
 #include <audio/SoundEngine.h>
+#include "EventManager.h"
+#include "events/OnEnemyDestroyedEvent.h"
 
 void Enemy::InitialConfig()
 {
@@ -27,4 +29,5 @@ void Enemy::OnCollisionEnter(GameObject* other)
 	other->SetActive(false);
 	
 	SoundEngine::Play2DAudio(SoundEngine::Sounds::Explosion);
+	EventManager::Dispatch(OnEnemyDestroyedEvent());
 }

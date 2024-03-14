@@ -2,7 +2,7 @@
 #include "render/Text.h"
 #include "Screen.h"
 #include "events/OnPlayerLoseHealthEvent.h"
-#include "events/OnEnemyDestroyedEvent.h"
+#include "events/OnScoreChangedEvent.h"
 
 class GameScreen : public Screen
 {
@@ -15,6 +15,6 @@ public:
 	void SetPlayerScore(int score);
 	void SetPlayerHealth(int health, int maxHealth);
 	void UpdateHealth(const OnPlayerLoseHealthEvent& eventArg);
-	void UpdateScore(const OnEnemyDestroyedEvent& eventArg);
+	void UpdateScore(const OnScoreChangedEvent& eventArg);
 };
 

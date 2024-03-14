@@ -14,13 +14,13 @@ GameScreen::GameScreen(Guid guid) : Screen(guid)
 	_playerHealthText->setPosition(Vector2f{ 7.0f, (float)AppWindow::WindowHeight - 20.0f});
 
 	EventManager::Subscribe<OnPlayerLoseHealthEvent>(std::bind(&GameScreen::UpdateHealth, this, std::placeholders::_1));
-	EventManager::Subscribe<OnEnemyDestroyedEvent>(std::bind(&GameScreen::UpdateScore, this, std::placeholders::_1));
+	EventManager::Subscribe<OnScoreChangedEvent>(std::bind(&GameScreen::UpdateScore, this, std::placeholders::_1));
 }
 
 GameScreen::~GameScreen()
 {
 	EventManager::Unsubscribe<OnPlayerLoseHealthEvent>(std::bind(&GameScreen::UpdateHealth, this, std::placeholders::_1));
-	EventManager::Unsubscribe<OnEnemyDestroyedEvent>(std::bind(&GameScreen::UpdateScore, this, std::placeholders::_1));
+	EventManager::Unsubscribe<OnScoreChangedEvent>(std::bind(&GameScreen::UpdateScore, this, std::placeholders::_1));
 }
 
 void GameScreen::SetPlayerScore(int score)
@@ -38,7 +38,7 @@ void GameScreen::UpdateHealth(const OnPlayerLoseHealthEvent& eventArg)
 	SetPlayerHealth(eventArg.GetPlayerHealth(), eventArg.GetPlayerMaxHealth());
 }
 
-void GameScreen::UpdateScore(const OnEnemyDestroyedEvent& eventArg)
+void GameScreen::UpdateScore(const OnScoreChangedEvent& eventArg)
 {
 	SetPlayerScore(eventArg.GetScore());
 }

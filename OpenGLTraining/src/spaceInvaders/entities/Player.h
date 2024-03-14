@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "ObjectPooling.h"
 #include "PlayerBullet.h"
+#include "events/OnEnemyDestroyedEvent.h"
 
 class Player : public GameObject
 {
@@ -19,21 +20,25 @@ private:
 	int _health{ 0 };
 	const int MaxHealth{ 3 };
 
+	int ScorePerKill{ 10 };
+	int _score{ 0 };
+
 	ObjectPooling<PlayerBullet> _bulletPool;
 	std::vector <std::shared_ptr<PlayerBullet>> _bullets;
 
 	void InitialConfig();
 	void SpawnProjectile();
+	void OnEnemyDestroyed(const OnEnemyDestroyedEvent& args);
 
 public:
 	explicit Player(Guid guid);
 	Player(Guid guid, glm::vec3 position, glm::vec2 rotation, glm::vec2 scale);
-	~Player() = default;
+	~Player();
 	void OnUpdate() override;
 	void OnUpdateInput() override;
 	void OnCollisionEnter(GameObject* other) override;
 	void ManageBulletsLifetime();
-	int GetMaxHealth() { return MaxHealth; }
-	int GetCurrentHealth() { return _health; }
+	int GetMaxHealth() const { return MaxHealth; }
+	int GetCurrentHealth() const { return _health; }
 };
 
