@@ -6,7 +6,7 @@
 GameScreen::GameScreen(Guid guid) : Screen(guid)
 {
 	_scoreText = InstantiateText();
-	_scoreText->setPosition(Vector2f{ AppWindow::WindowWidth - 100.0f, 10.0f });
+	_scoreText->setPosition(Vector2f{ AppWindow::WindowWidth - 150.0f, 10.0f });
 
 	_playerHealthText = InstantiateText();
 	_playerHealthText->setPosition(Vector2f{ 7.0f, AppWindow::WindowHeight - 20.0f});

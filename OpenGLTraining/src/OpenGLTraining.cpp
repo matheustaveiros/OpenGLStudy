@@ -89,7 +89,7 @@ int main()
     textShader.SetUniformMat4f("projection", glm::ortho(0.0f, static_cast<float>(AppWindow::WindowWidth), static_cast<float>(AppWindow::WindowHeight), 0.0f));
     textShader.SetUniform1i("text", 0);
 
-    FontManager::CreateFont("default", "res/fonts/Roboto-Bold.ttf", 20);
+    FontManager::CreateFont("default", "res/fonts/CosmicAlien-V4Ax.ttf", 20);
 
     Core core{};
     core.Awake();
