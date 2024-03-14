@@ -21,11 +21,11 @@ public:
     static void Clear();
 
 private:
-    static std::map<std::string, Shader> Shaders;
+    static std::map<std::string, Shader> _shaders;
 
     // loads and generates a shader from file
-    static Shader loadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile = nullptr);
+    static Shader LoadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile = nullptr);
     
     // loads a single texture from file
-    static Texture loadTextureFromFile(const char* file, bool alpha);
+    static Texture LoadTextureFromFile(const char* file, bool alpha);
 };

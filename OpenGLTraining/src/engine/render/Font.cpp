@@ -4,9 +4,9 @@
 #include <iostream>
 #include <GL/glew.h>
 
-void Font::loadFromFile(const std::string& file, unsigned int fontSize)
+void Font::LoadFromFile(const std::string& file, unsigned int fontSize)
 {
-    this->Characters.clear();
+    _characters.clear();
 
     FT_Library ft;
 
@@ -67,7 +67,7 @@ void Font::loadFromFile(const std::string& file, unsigned int fontSize)
             face->glyph->advance.x
         };
 
-        Characters.insert(std::pair<char, Character>(c, character));
+        _characters.insert(std::pair<char, Character>(c, character));
     }
 
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -78,10 +78,10 @@ void Font::loadFromFile(const std::string& file, unsigned int fontSize)
 
 Font::Font(const std::string& file, unsigned int fontSize)
 {
-    loadFromFile(file, fontSize);
+    LoadFromFile(file, fontSize);
 }
 
-std::map<char, Character> Font::getCharacters()
+std::map<char, Character> Font::GetCharacters()
 {
-    return Characters;
+    return _characters;
 }

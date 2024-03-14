@@ -6,17 +6,17 @@
 
 void Text::InitialConfig()
 {
-    m_VertexArray.Bind();
-    m_VertexBuffer = VertexBuffer(nullptr, sizeof(float) * 6 * 4);
+    _vertexArray.Bind();
+    _vertexBuffer = VertexBuffer(nullptr, sizeof(float) * 6 * 4);
 
     VertexBufferLayout vertexBufferLayout;
     vertexBufferLayout.Push<float>(4);
 
-    m_VertexArray.AddBuffer(m_VertexBuffer, vertexBufferLayout);
+    _vertexArray.AddBuffer(_vertexBuffer, vertexBufferLayout);
 
-    m_VertexBuffer.Unbind();
-    m_VertexArray.Unbind();
-    m_Font = FontManager::GetFont("default");
+    _vertexBuffer.Unbind();
+    _vertexArray.Unbind();
+    _font = FontManager::GetFont("default");
 }
 
 Text::Text()
@@ -24,29 +24,29 @@ Text::Text()
     InitialConfig();
 }
 
-void Text::setCharacterSize(float size)
+void Text::SetCharacterSize(float size)
 {
-    m_Size = size;
+    _size = size;
 }
 
-void Text::setString(const std::string& text)
+void Text::SetString(const std::string& text)
 {
-    m_Text = text;
+    _text = text;
 }
 
-void Text::setFont(Font* font)
+void Text::SetFont(Font* font)
 {
-    m_Font = font;
+    _font = font;
 }
 
-void Text::setPosition(Vector2f position)
+void Text::SetPosition(Vector2f position)
 {
-    m_Position = position;
+    _position = position;
 }
 
-void Text::setFillColor(Color color)
+void Text::SetFillColor(Color color)
 {
-    m_Color = color;
+    _color = color;
 }
 
 void Text::Draw()
@@ -54,26 +54,26 @@ void Text::Draw()
     //void TextRenderer::RenderText(std::string text, float x, float y, float scale, glm::vec3 color)
 
     // activate corresponding render state	
-    m_Shader.Bind();
-    m_Shader.SetUniform3f("textColor", m_Color.getRGB().x, m_Color.getRGB().y, m_Color.getRGB().z);
+    _shader.Bind();
+    _shader.SetUniform3f("textColor", _color.GetRGB().x, _color.GetRGB().y, _color.GetRGB().z);
     glActiveTexture(GL_TEXTURE0);
-    m_VertexArray.Bind();
+    _vertexArray.Bind();
 
-    float x = m_Position.x;
+    float x = _position.x;
 
     //m_Size = 1;
 
     // iterate through all characters
     std::string::const_iterator c;
-    for (c = m_Text.begin(); c != m_Text.end(); c++)
+    for (c = _text.begin(); c != _text.end(); c++)
     {
-        Character ch = m_Font->getCharacters()[*c];
+        Character ch = _font->GetCharacters()[*c];
 
-        float xpos = x + ch.Bearing.x * m_Size;
-        float ypos = m_Position.y + (m_Font->getCharacters()['H'].Bearing.y - ch.Bearing.y) * m_Size;
+        float xpos = x + ch.Bearing.x * _size;
+        float ypos = _position.y + (_font->GetCharacters()['H'].Bearing.y - ch.Bearing.y) * _size;
 
-        float w = ch.Size.x * m_Size;
-        float h = ch.Size.y * m_Size;
+        float w = ch.Size.x * _size;
+        float h = ch.Size.y * _size;
 
         // update VBO for each character
         float vertices[6][4] = {
@@ -90,18 +90,18 @@ void Text::Draw()
         glBindTexture(GL_TEXTURE_2D, ch.TextureID);
 
         // update content of VBO memory
-        m_VertexBuffer.Bind();
+        _vertexBuffer.Bind();
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // be sure to use glBufferSubData and not glBufferData
-        m_VertexBuffer.Unbind();
+        _vertexBuffer.Unbind();
         
         // render quad
         glDrawArrays(GL_TRIANGLES, 0, 6);
         
         // now advance cursors for next glyph
         // bitshift by 6 to get value in pixels (1/64th times 2^6 = 64)
-        x += (ch.Advance >> 6) * m_Size;
+        x += (ch.Advance >> 6) * _size;
     }
 
-    m_VertexArray.Unbind();
+    _vertexArray.Unbind();
     glBindTexture(GL_TEXTURE_2D, 0);
 }

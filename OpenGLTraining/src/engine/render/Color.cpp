@@ -1,21 +1,21 @@
 #include "Color.h"
 
 Color::Color(float red, float green, float blue)
-	:m_Red(red), m_Green(green), m_Blue(blue), m_Alpha(1)
+	:_red(red), _green(green), _blue(blue), _alpha(1)
 {
 }
 
 Color::Color(float red, float green, float blue, float alpha)
-	:m_Red(red), m_Green(green), m_Blue(blue), m_Alpha(alpha)
+	:_red(red), _green(green), _blue(blue), _alpha(alpha)
 {
 }
 
-glm::vec3 Color::getRGB() const
+glm::vec3 Color::GetRGB() const
 {
-	return glm::vec3(m_Red, m_Green, m_Blue);
+	return glm::vec3(_red, _green, _blue);
 }
 
-glm::vec4 Color::getRGBA() const
+glm::vec4 Color::GetRGBA() const
 {
-	return glm::vec4(m_Red, m_Green, m_Blue, m_Alpha);
+	return glm::vec4(_red, _green, _blue, _alpha);
 }

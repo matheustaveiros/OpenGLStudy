@@ -4,7 +4,7 @@
 
 Shader::Shader()
 {
-	GLCall(m_RendererID = glCreateProgram());
+	GLCall(_rendererID = glCreateProgram());
 }
 
 Shader::~Shader()
@@ -34,20 +34,20 @@ void Shader::SetUniformMat4f(const std::string& name, const glm::mat4& matrix)
 
 int Shader::GetUniformLocation(const std::string& name)
 {
-	if (m_Locations.find(name) != m_Locations.end())
+	if (_locations.find(name) != _locations.end())
 	{
-		return m_Locations[name];
+		return _locations[name];
 	}
 	else
 	{
-		GLCall(int location = glGetUniformLocation(m_RendererID, name.c_str()));
+		GLCall(int location = glGetUniformLocation(_rendererID, name.c_str()));
 
 		if (location == -1)
 		{
 			std::cout << "ERROR, ShaderProgram::GetUniformLocation could not find " << name << std::endl;
 		}
 
-		m_Locations[name] = location;
+		_locations[name] = location;
 
 		return location;
 	}
@@ -81,13 +81,13 @@ void Shader::Compile(const char* vertexSource, const char* fragmentSource, const
 	}
 
 	// shader program
-	m_RendererID = glCreateProgram();
-	glAttachShader(m_RendererID, sVertex);
-	glAttachShader(m_RendererID, sFragment);
+	_rendererID = glCreateProgram();
+	glAttachShader(_rendererID, sVertex);
+	glAttachShader(_rendererID, sFragment);
 	if (geometrySource != nullptr)
-		glAttachShader(m_RendererID, gShader);
-	glLinkProgram(m_RendererID);
-	checkCompileErrors(m_RendererID, "PROGRAM");
+		glAttachShader(_rendererID, gShader);
+	glLinkProgram(_rendererID);
+	checkCompileErrors(_rendererID, "PROGRAM");
 
 	// delete the shaders as they're linked into our program now and no longer necessary
 	glDeleteShader(sVertex);
@@ -98,7 +98,7 @@ void Shader::Compile(const char* vertexSource, const char* fragmentSource, const
 
 void Shader::Bind() const
 {
-	GLCall(glUseProgram(m_RendererID));
+	GLCall(glUseProgram(_rendererID));
 }
 
 void Shader::Unbind() const

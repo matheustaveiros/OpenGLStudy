@@ -3,7 +3,7 @@
 #include <sstream>
 #include <fstream>
 
-std::map<std::string, Shader> ShaderManager::Shaders;
+std::map<std::string, Shader> ShaderManager::_shaders;
 
 Shader ShaderManager::LoadShader(
     const char* vShaderFile,
@@ -11,23 +11,23 @@ Shader ShaderManager::LoadShader(
     const char* gShaderFile,
     const std::string& name)
 {
-    Shaders[name] = loadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
-    return Shaders[name];
+    _shaders[name] = LoadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
+    return _shaders[name];
 }
 
 Shader& ShaderManager::GetShader(const std::string& name)
 {
-    return Shaders[name];
+    return _shaders[name];
 }
 
 void ShaderManager::Clear()
 {
     // (properly) delete all shaders	
-    for (const auto& iter : Shaders)
+    for (const auto& iter : _shaders)
         glDeleteProgram(iter.second.GetID());
 }
 
-Shader ShaderManager::loadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile)
+Shader ShaderManager::LoadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile)
 {
     // 1. retrieve the vertex/fragment source code from filePath
     std::string vertexCode;

@@ -2,8 +2,8 @@
 
 #include "stb_image/stb_image.h"
 
-Texture::Texture(const std::string& FilePath)
-    : m_FilePath(FilePath)
+Texture::Texture(const std::string& filePath)
+    : _filePath(filePath)
 {
     // Makes the image upside down
     // We need to do this because the 0,0 on OpenGL is the bottom left, instead of the top left on .png format 
@@ -11,10 +11,10 @@ Texture::Texture(const std::string& FilePath)
 
     // We pass pointers for the width, height and so on so the function can set the proper values on them after figuring it out when loading the texture
     // Desired channels is how many channels we expect this image to have, 4 as we expect RGBA
-    m_LocalBuffer = stbi_load(FilePath.c_str(), &m_Width, &m_Height, &m_BPP, 4);
+    _localBuffer = stbi_load(filePath.c_str(), &_width, &_height, &_bytesPerPixel, 4);
 
-    GLCall(glGenTextures(1, &m_RendererID));
-    GLCall(glBindTexture(GL_TEXTURE_2D, m_RendererID));
+    GLCall(glGenTextures(1, &_rendererID));
+    GLCall(glBindTexture(GL_TEXTURE_2D, _rendererID));
 
     // To set params for our generated texture, we call the glTexParameter with the suffix of the type of data we are trying to set
     // 'i' is for integer
@@ -39,28 +39,28 @@ Texture::Texture(const std::string& FilePath)
     // format: the format of the data we are providing, m_LocalBuffer is GL_RGBA
     // type: type of the data, each channel is unsigned byte
     // pixels: the pixels data. If we didn't have it right now, we could pass a nullptr so we just allocated memory on GPU for now so we can later provide it
-    GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_LocalBuffer));
+    GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, _localBuffer));
 
     // We are done setting up the texture, so unbind
     GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 
     // Release local buffer from CPU memory
     // We don't need it anymore, but maybe in some cases we do want to keep it. A flag for that would be useful
-    if (m_LocalBuffer)
+    if (_localBuffer)
     {
-        stbi_image_free(m_LocalBuffer);
+        stbi_image_free(_localBuffer);
     }
 }
 
 Texture::~Texture()
 {
-    GLCall(glDeleteTextures(1, &m_RendererID));
+    GLCall(glDeleteTextures(1, &_rendererID));
 }
 
-void Texture::Bind(unsigned int Slot) const
+void Texture::Bind(unsigned int slot) const
 {
-    GLCall(glActiveTexture(GL_TEXTURE0 + Slot)); // Set slot X as active texture slot
-    GLCall(glBindTexture(GL_TEXTURE_2D, m_RendererID));
+    GLCall(glActiveTexture(GL_TEXTURE0 + slot)); // Set slot X as active texture slot
+    GLCall(glBindTexture(GL_TEXTURE_2D, _rendererID));
 }
 
 void Texture::Unbind() const

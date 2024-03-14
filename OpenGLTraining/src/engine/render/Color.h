@@ -10,13 +10,13 @@ public:
 
 	Color(float red, float green, float blue, float alpha);
 
-	glm::vec3 getRGB() const;
+	glm::vec3 GetRGB() const;
 
-	glm::vec4 getRGBA() const;
+	glm::vec4 GetRGBA() const;
 
 private:
-	float m_Red{ 1.0f };
-	float m_Green{ 1.0f };
-	float m_Blue{ 1.0f };
-	float m_Alpha{ 1.0f };
+	float _red{ 1.0f };
+	float _green{ 1.0f };
+	float _blue{ 1.0f };
+	float _alpha{ 1.0f };
 };

@@ -22,12 +22,12 @@ public:
 	void Bind() const;
 	void Unbind() const;
 
-	inline unsigned int GetID() const { return m_RendererID; }
+	inline unsigned int GetID() const { return _rendererID; }
 
 private:
-	unsigned int m_RendererID;
+	unsigned int _rendererID;
 
-	std::unordered_map<std::string, int> m_Locations;
+	std::unordered_map<std::string, int> _locations;
 
 	void checkCompileErrors(unsigned int object, const std::string& type) const;
 };

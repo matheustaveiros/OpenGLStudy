@@ -13,35 +13,34 @@ class Text : public Drawable
 public:
 	Text();
 
-	void setCharacterSize(float size);
+	void SetCharacterSize(float size);
 
-	void setString(const std::string& text);
+	void SetString(const std::string& text);
 
-	void setFont(Font* font);
+	void SetFont(Font* font);
 
-	void setPosition(Vector2f position);
+	void SetPosition(Vector2f position);
 
-	void setFillColor(Color color);
+	void SetFillColor(Color color);
 
-	// Inherited via Drawable
 	void Draw() override;
 
 private:
 	void InitialConfig();
 
-	Shader m_Shader = ShaderManager::GetShader("text");
+	Shader _shader = ShaderManager::GetShader("text");
 
-	VertexArray m_VertexArray;
+	VertexArray _vertexArray;
 
-	Color m_Color{ 1.0f, 1.0f, 1.0f, 1.0f };
+	Color _color{ 1.0f, 1.0f, 1.0f, 1.0f };
 
-	std::string m_Text;
+	std::string _text;
 
-	Vector2f m_Position{ 0.0f, 0.0f };
+	Vector2f _position{ 0.0f, 0.0f };
 
-	float m_Size{ 1.0f };
+	float _size{ 1.0f };
 
-	VertexBuffer m_VertexBuffer;
+	VertexBuffer _vertexBuffer;
 
-	Font* m_Font;
+	Font* _font;
 };
