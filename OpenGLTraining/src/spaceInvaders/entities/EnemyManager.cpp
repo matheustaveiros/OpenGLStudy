@@ -7,7 +7,7 @@
 void EnemyManager::SpawnEnemies()
 {
 	const float startOffsetX = 25.0f;
-	glm::vec3 enemyPosition{ startOffsetX,500,0 };
+	glm::vec3 enemyPosition{ startOffsetX, 470,0 };
 	glm::vec3 enemySpriteSize{ 30,24,1 };
 	const float enemyOffsetX = 10;
 	const float enemyOffsetY = 10;
