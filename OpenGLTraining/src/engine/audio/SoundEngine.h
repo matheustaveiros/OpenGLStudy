@@ -7,7 +7,7 @@ class SoundEngine
 public:
 	SoundEngine();
 
-	static enum class Sounds
+	enum class Sounds
 	{
 		None = 0,
 		Applause = 1,

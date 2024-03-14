@@ -15,7 +15,8 @@ private:
 	void CreateGameUI();
 
 public:
-	GameScene(const std::string& name);
+	explicit GameScene(const std::string& name);
+	~GameScene() = default;
 	void SpawnPlayer();
 	void OnUpdate() override;
 };

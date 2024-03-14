@@ -6,7 +6,7 @@
 class PhysicsLayer
 {
 public:
-	static enum class Layer
+	enum class Layer
 	{
 		None = -1,
 		Default = 0,

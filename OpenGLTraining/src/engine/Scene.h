@@ -17,9 +17,10 @@ private:
 public:
 	inline static Scene* ActiveScene;
 
-	Scene(const std::string& name);
+	explicit Scene(const std::string& name);
+	virtual ~Scene();
 
-	inline std::string_view GetName() const { return _name; }
+	std::string_view GetName() const { return _name; }
 
 	template <typename T>
 	T* InstantiateGameObject();

@@ -6,6 +6,8 @@
 #include "AppWindow.h"
 #include "Scene.h"
 #include "audio/SoundEngine.h"
+#include "EventManager.h"
+#include "events/OnPlayerLoseHealthEvent.h"
 
 Player::Player(Guid guid) : GameObject(guid)
 {
@@ -73,6 +75,8 @@ void Player::OnCollisionEnter(GameObject* other)
 	std::cout << "Player was Hit, current Life is: " << std::to_string(_health) << "\n";
 
 	SoundEngine::Play2DAudio(SoundEngine::Sounds::Explosion);
+
+	EventManager::Dispatch(OnPlayerLoseHealthEvent(_health, MaxHealth));
 
 	if (_health < 0)
 	{

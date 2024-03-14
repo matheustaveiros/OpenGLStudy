@@ -21,9 +21,9 @@ private:
 	PhysicsLayer::Layer _layer;
 
 public:
-	GameObject(Guid guid);
+	explicit GameObject(Guid guid);
 	GameObject(Guid guid, glm::vec3 position, glm::vec2 rotation, glm::vec2 scale);
-	~GameObject();
+	virtual ~GameObject();
 	Guid GetGuid() const { return _guid; }
 	Transform* GetTransform() { return _transform.get(); }
 	SpriteRenderer* GetSpriteRenderer() { return _spriteRenderer.get(); }

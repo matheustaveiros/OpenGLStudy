@@ -26,8 +26,9 @@ private:
 	void SpawnProjectile();
 
 public:
-	Player(Guid guid);
+	explicit Player(Guid guid);
 	Player(Guid guid, glm::vec3 position, glm::vec2 rotation, glm::vec2 scale);
+	~Player() = default;
 	void OnUpdate() override;
 	void OnUpdateInput() override;
 	void OnCollisionEnter(GameObject* other) override;

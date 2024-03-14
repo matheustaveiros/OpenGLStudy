@@ -6,6 +6,10 @@ Scene::Scene(const std::string& name) : _name { name }
 	Scene::ActiveScene = this;
 }
 
+Scene::~Scene()
+{
+}
+
 void Scene::DestroyGameObject(Guid guid)
 {
 	if (_gameObjectsMap.contains(guid))

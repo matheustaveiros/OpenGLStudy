@@ -22,6 +22,6 @@ Bullet::Bullet(Guid guid, glm::vec3 position, glm::vec2 rotation, glm::vec2 scal
 void Bullet::OnUpdate()
 {
 	glm::vec3 position = GetTransform()->GetPosition();
-	position.y += _direction * _velocity * GameTime::DeltaTime;
+	position.y += (float)_direction * _velocity * GameTime::DeltaTime;
 	GetTransform()->SetPosition(position);
 }

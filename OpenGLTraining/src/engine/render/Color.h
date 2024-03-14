@@ -4,19 +4,19 @@
 class Color
 {
 public:
-	Color();
+	Color() = default;
 
-	Color(int red, int green, int blue);
+	Color(float red, float green, float blue);
 
-	Color(int red, int green, int blue, int alpha);
+	Color(float red, float green, float blue, float alpha);
 
-	glm::vec3 getRGB();
+	glm::vec3 getRGB() const;
 
-	glm::vec4 getRGBA();
+	glm::vec4 getRGBA() const;
 
 private:
-	int m_Red;
-	int m_Green;
-	int m_Blue;
-	int m_Alpha;
+	float m_Red{ 1.0f };
+	float m_Green{ 1.0f };
+	float m_Blue{ 1.0f };
+	float m_Alpha{ 1.0f };
 };

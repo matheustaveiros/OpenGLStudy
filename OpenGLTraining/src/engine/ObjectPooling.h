@@ -25,7 +25,7 @@ public:
         }
     }
 
-    int GetPoolSize() const { return _available.size(); }
+    int GetPoolSize() const { return static_cast<int>(_available.size()); }
     T* AccessObjectByIndex(int index) { return _pool[index]; }
 
     std::tuple<bool, T*> GetObjectAndState(int i)

@@ -11,8 +11,9 @@ private:
 	void InitialConfig();
 
 public:
-	EnemyBullet(Guid guid);
+	explicit EnemyBullet(Guid guid);
 	EnemyBullet(Guid guid, glm::vec3 position, glm::vec2 rotation, glm::vec2 scale);
+	~EnemyBullet() = default;
 	void OnUpdate() override;
 };
 
