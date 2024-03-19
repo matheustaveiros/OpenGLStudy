@@ -60,6 +60,83 @@ void EnemyManager::Update()
 	}
 
 	ManageBulletsLifetime();
+	DoEnemyMove();
+}
+
+void EnemyManager::DoEnemyMove()
+{
+	_enemyMoveTime += GameTime::DeltaTime;
+	if (_enemyMoveTime < _enemyMoveDelay)
+	{
+		return;
+	}
+
+	_enemyMoveTime = 0.0f;
+
+	if (_enemyMoveDelay > MinMoveDelay)
+	{
+		_enemyMoveDelay -= EnemyMoveIncreaseRatio;
+		
+		if (_enemyMoveDelay < MinMoveDelay)
+			_enemyMoveDelay = MinMoveDelay;
+	}
+
+	bool shouldChangeDirection = false;
+	for (int i = 0; i < _enemyPool.GetPoolSize(); i++)
+	{
+		Transform* transform = _enemyPool.AccessObjectByIndex(i)->GetTransform();
+		glm::vec3 pos = transform->GetPosition();
+		pos.x += static_cast<float>(_currentDirection) * GameTime::DeltaTime * EnemyMoveXRange;
+		transform->SetPosition(pos);
+
+		if (!shouldChangeDirection && IsOutOfBoundsHorizontal(pos))
+		{
+			shouldChangeDirection = true;
+		}
+	}
+
+	if (shouldChangeDirection)
+	{
+		_currentDirection *= -1;
+		MoveAllEnemiesDown();
+	}
+
+	SoundEngine::Play2DAudio(SoundEngine::Sounds::Descent);
+}
+
+void EnemyManager::MoveAllEnemiesDown()
+{
+	for (int i = 0; i < _enemyPool.GetPoolSize(); i++)
+	{
+		Transform* transform = _enemyPool.AccessObjectByIndex(i)->GetTransform();
+		glm::vec3 pos = transform->GetPosition();
+		pos.y += EnemyMoveYRange * GameTime::DeltaTime;
+		transform->SetPosition(pos);
+
+		if (IsOutOfBoundsBottom(pos))
+		{
+			//Destroy Enemy
+			//Remove Player Life
+		}
+	}
+}
+
+bool EnemyManager::IsOutOfBoundsHorizontal(glm::vec3 pos) const
+{
+	if(pos.x > static_cast<float>(AppWindow::WindowWidth) + BoundsWidthOffsetRight)
+		return true;
+	if (pos.x < BoundsWidthOffsetLeft)
+		return true;
+
+	return false;
+}
+
+bool EnemyManager::IsOutOfBoundsBottom(glm::vec3 pos) const
+{
+	if (pos.y < BoundsHeightOffset)
+		return true;
+
+	return false;
 }
 
 Enemy* EnemyManager::GetRandomEnemyAlive()
