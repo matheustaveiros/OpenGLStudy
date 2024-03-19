@@ -16,10 +16,10 @@ private:
 	const float BulletSpawnOffsetY{ -15.0f };
 	
 	int _currentDirection{ 1 };
-	const float EnemyMoveXRange{ 400.0f };
-	const float EnemyMoveYRange{ -400.0f };
-	const float BoundsWidthOffsetLeft{ 3.0f };
-	const float BoundsWidthOffsetRight{ -33.0f };
+	const float EnemyMoveXRange{ 600.0f };
+	const float EnemyMoveYRange{ -1000.0f };
+	const float BoundsWidthOffsetLeft{ 13.0f };
+	const float BoundsWidthOffsetRight{ -43.0f };
 	const float BoundsHeightOffset{ 10.0f };
 
 	float _enemyMoveDelay{ 1.0f };

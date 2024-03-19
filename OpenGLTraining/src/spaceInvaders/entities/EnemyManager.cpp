@@ -84,7 +84,11 @@ void EnemyManager::DoEnemyMove()
 	bool shouldChangeDirection = false;
 	for (int i = 0; i < _enemyPool.GetPoolSize(); i++)
 	{
-		Transform* transform = _enemyPool.AccessObjectByIndex(i)->GetTransform();
+		Enemy* enemy = _enemyPool.AccessObjectByIndex(i);
+		if (!enemy->IsActive())
+			continue;
+
+		Transform* transform = enemy->GetTransform();
 		glm::vec3 pos = transform->GetPosition();
 		pos.x += static_cast<float>(_currentDirection) * GameTime::DeltaTime * EnemyMoveXRange;
 		transform->SetPosition(pos);
@@ -108,15 +112,19 @@ void EnemyManager::MoveAllEnemiesDown()
 {
 	for (int i = 0; i < _enemyPool.GetPoolSize(); i++)
 	{
-		Transform* transform = _enemyPool.AccessObjectByIndex(i)->GetTransform();
+		Enemy* enemy = _enemyPool.AccessObjectByIndex(i);
+		if (!enemy->IsActive())
+			continue;
+
+		Transform* transform = enemy->GetTransform();
 		glm::vec3 pos = transform->GetPosition();
 		pos.y += EnemyMoveYRange * GameTime::DeltaTime;
 		transform->SetPosition(pos);
 
 		if (IsOutOfBoundsBottom(pos))
 		{
-			//Destroy Enemy
-			//Remove Player Life
+			enemy->SetActive(false);
+			//Dispatch Remove Player Life
 		}
 	}
 }
